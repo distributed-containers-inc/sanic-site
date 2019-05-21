@@ -8,7 +8,6 @@ import (
 
 func main() {
 	router := gin.Default()
-	router.Delims("{{", "}}")
 	router.LoadHTMLFiles("./templates/index.tmpl")
 
 	router.GET("/", func(c *gin.Context) {
@@ -20,5 +19,5 @@ func main() {
 		})
 	})
 
-	router.Run("0.0.0.0:8080")
+	router.Run("0.0.0.0:80")
 }
