@@ -3,18 +3,21 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
-	router.LoadHTMLFiles("./templates/index.tmpl")
+	renderer := multitemplate.NewRenderer()
+	renderer.AddFromFiles("index", "templates/index.tmpl")
+	router.HTMLRender = renderer
 
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "index.html")
 	})
 	router.GET("/index.html", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", map[string]interface{}{
+		c.HTML(http.StatusOK, "index", map[string]interface{}{
 			"Test": "hullo!",
 		})
 	})
