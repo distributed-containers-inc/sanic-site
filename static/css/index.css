@@ -1,0 +1,24 @@
+.initial-content {
+    display: flex;
+    flex-direction: row;
+
+    flex: 0 1 50%;
+
+    padding: 100px 50px 75px 50px;
+}
+
+.initial-content > .left {
+    font-weight: 700;
+    font-size: 3.5em;
+    margin: 0 30px 0 30px;
+}
+
+.initial-content > .left, .initial-content > .right {
+    flex: 0 1 auto;
+}
+
+.call-to-action-content {
+    background-color: white;
+    padding: 75px 50px 75px 50px;
+    font-size: 2em;
+}
