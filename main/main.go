@@ -21,6 +21,7 @@ func main() {
 			"Test": "hullo!",
 		})
 	})
+	router.Static("/static", "./static")
 
 	router.Run("0.0.0.0:80")
 }
