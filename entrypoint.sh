@@ -38,7 +38,7 @@ done
 echo "Starting the app in development mode..."
 _start_app
 while true; do
-    while inotifywait -r -e create,modify,delete $(find . -name '*.go') || exit 1; do
+    while inotifywait -r -e create,modify,delete $(find . -name '*.go'); do
         echo "Noticed a change. Restarting app."
         _term_app
         _start_app
