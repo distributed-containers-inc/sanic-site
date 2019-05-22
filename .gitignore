@@ -1,3 +1,5 @@
-.idea/
-*.iml
-logs/
+/.idea/
+/*.iml
+/logs
+
+.fuse_hidden*

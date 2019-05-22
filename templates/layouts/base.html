@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="static/react.development.js" crossorigin="anonymous"></script>
-    <script src="static/react-dom.development.js" crossorigin="anonymous"></script>
-    {{define "extra_head"}}{{end}}
+    <script src="static/js/react.development.js" crossorigin="anonymous"></script>
+    <script src="static/js/react-dom.development.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="static/css/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- begin page specific head contents -->
+    {{template "extra_head" .}}
+    <!-- end page specific head contents -->
 </head>
 <body>
-index template: {{template "content" .}}<br>
-Variable is: {{.Test}}
+    <nav class="header-nav">
+        <a href="demo">Demo</a>
+        <a href="about">About</a>
+        <a href="." class="title">Sanic</a>
+        <a href="docs">Docs</a>
+        <a href="https://github.com/distributed-containers-inc/sanic">Source</a>
+    </nav>
+    <div class="main-content">
+        {{template "content" .}}
+    </div>
 </body>
 </html>
+
+{{define "extra_head"}}{{end}}

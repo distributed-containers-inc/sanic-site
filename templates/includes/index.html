@@ -1,1 +1,16 @@
-{{define "content"}}Hi, this is index.html{{end}}
+{{define "extra_head"}}
+<link rel="stylesheet" href="static/css/asciinema-player.css">
+<link rel="stylesheet" href="static/css/index.css">
+{{end}}
+
+{{define "content"}}
+<div class="initial-content">
+    <div class="left">
+        Production ready tooling for Docker and Kubernetes
+    </div>
+    <div class="right">
+        <asciinema-player src="static/asciinema/index.cast"></asciinema-player>
+        <script src="static/js/asciinema-player.js"></script>
+    </div>
+</div>
+{{end}}
