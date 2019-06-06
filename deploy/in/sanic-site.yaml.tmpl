@@ -1,0 +1,53 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: sanic-site
+  labels:
+    k8s-app: sanic-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: sanic-site
+  template:
+    metadata:
+      labels:
+        k8s-app: sanic-site
+        name: sanic-site
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - image: {{getenv "REGISTRY_HOST"}}/sanic-site:{{getenv "IMAGE_TAG"}}
+        name: sanic-site
+        ports:
+        - name: http
+          containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sanic-site
+spec:
+  selector:
+    k8s-app: sanic-site
+  ports:
+  - protocol: TCP
+    port: 80
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: sanic-site
+  annotations:
+    traefik.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: sanic-site
+          servicePort: 80

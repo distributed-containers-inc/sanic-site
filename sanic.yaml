@@ -1,16 +1,3 @@
 environments:
   dev:
-    commands:
-    - name: deploy
-      command: |
-        set -eu -o pipefail
-        dockerfile_app_loc=/go/src/app
-        sanic build
-        docker rm -f sanic-site 2>/dev/null || true
-        docker run \
-          --name sanic-site \
-          -p 80:80 \
-          -v ${SANIC_ROOT}/main:${dockerfile_app_loc}/main \
-          -v ${SANIC_ROOT}/templates:${dockerfile_app_loc}/templates \
-          -v ${SANIC_ROOT}/static:${dockerfile_app_loc}/static \
-          sanic-site
+    clusterProvisioner: localdev
