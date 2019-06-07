@@ -11,12 +11,12 @@
 
 if [[ "${SANIC_ENV}" = "prod" ]]; then
     echo "Starting the app in production mode..."
-    go build main/main.go
+    go build main.go
     GIN_MODE=release exec ./main
 fi
 
 _start_app() {
-    go run main/main.go&
+    go run main.go&
     APP_ID=$!
 }
 
@@ -38,7 +38,7 @@ done
 echo "Starting the app in development mode..."
 _start_app
 while true; do
-    while inotifywait -r -e create,modify,delete $(find . -name '*.go') $(find static); do
+    while inotifywait -r -e create,modify,delete .; do
         echo "Noticed a change. Restarting app."
         _term_app
         _start_app

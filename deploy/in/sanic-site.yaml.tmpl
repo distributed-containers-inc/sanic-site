@@ -16,7 +16,7 @@ spec:
         k8s-app: sanic-site
         name: sanic-site
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: {{if eq (getenv "SANIC_ENV") "dev"}}10{{else}}1{{end}}
       containers:
       - image: {{getenv "REGISTRY_HOST"}}/sanic-site:{{getenv "IMAGE_TAG"}}
         name: sanic-site
@@ -41,8 +41,6 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: sanic-site
-  annotations:
-    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:

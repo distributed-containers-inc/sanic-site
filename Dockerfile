@@ -10,7 +10,7 @@ WORKDIR /go/src/app
 RUN go get github.com/gin-gonic/gin
 RUN go get github.com/gin-contrib/multitemplate
 
-COPY main templates static ./
+COPY app .
 COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
