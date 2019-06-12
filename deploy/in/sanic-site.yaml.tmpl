@@ -29,7 +29,8 @@ spec:
         name: sanic-site
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 8080
+          port: 80
         {{if eq (getenv "SANIC_ENV") "dev"}}
         volumeMounts:
         - mountPath: /go/src/app

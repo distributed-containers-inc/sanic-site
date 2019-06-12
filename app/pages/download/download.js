@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 
-function Index() {
+function Download() {
     return (
+        <div className="content">
         <Button variant="contained" color="primary">
-            Hello World
+            Download: Hello World
         </Button>
+        </div>
     );
 }
 
-ReactDOM.render(<Index />, document.querySelector('#hello'));
+ReactDOM.render(<Download />, document.querySelector('#hello'));

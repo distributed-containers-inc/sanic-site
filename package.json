@@ -16,6 +16,8 @@
     "typeface-montserrat": "0.0.54"
   },
   "devDependencies": {
+    "css-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.4"
   }

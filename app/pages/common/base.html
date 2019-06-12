@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="common.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- begin page specific head contents -->
@@ -23,6 +23,9 @@
 <footer>
     © Distributed Containers Inc. 2019
 </footer>
+{{range $bundle := PageBundles}}
+<script type="text/javascript" src="{{$bundle}}"></script>
+{{end}}
 </html>
 
 {{define "extra_head"}}{{end}}
