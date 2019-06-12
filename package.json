@@ -15,7 +15,6 @@
     "react": "latest",
     "react-dom": "latest",
     "react-swipeable-views": "^0.13.3",
-    "react-swipeable-views-utils": "^0.13.3",
     "typeface-montserrat": "0.0.54"
   },
   "devDependencies": {
