@@ -19,9 +19,6 @@ func pageHtmlPaths() ([]string) {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() && info.Name() == "common" {
-			return filepath.SkipDir
-		}
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".html") {
 			pages = append(pages, path)
 		}
@@ -55,7 +52,7 @@ func pageBundles(pageName string) ([]string, error) {
 func loadTemplates() render.HTMLRender {
 	r := multitemplate.NewRenderer()
 
-	layouts, err := filepath.Glob("pages/common/*.html")
+	layouts, err := filepath.Glob("common/*.html")
 	if err != nil {
 		panic(err)
 	}

@@ -1,9 +1,17 @@
 const path = require('path');
 const glob = require("glob");
 
+let entries = () => {
+    let ret = {};
+    for (let pagePath of glob.sync('./app/pages/**/*.js')) {
+        ret[path.basename(pagePath, '.js')] = pagePath;
+    }
+    return ret;
+};
+
 module.exports = {
     mode: process.env.RUN_MODE === "prod" ? "production" : "development",
-    entry: glob.sync('./app/pages/**/*.js'),
+    entry: entries(),
     output: {
         path: path.resolve(__dirname, "app/static/bundles"),
         filename: "[name].bundle.js",

@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Button from '@material-ui/core/Button';
+import Carousel from '../../common/carousel';
 
-function Index() {
+function SanicFeatures() {
     return (
         <div className="content">
-        <Button variant="contained" color="primary">
+        <Carousel variant="contained" color="primary">
             Hello World
-        </Button>
+        </Carousel>
         </div>
     );
 }
 
-ReactDOM.render(<Index />, document.querySelector('#hello'));
+ReactDOM.render(<SanicFeatures />, document.querySelector('#sanic-features-interactive'));
