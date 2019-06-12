@@ -13,72 +13,9 @@ import (
 	"strings"
 )
 
-func main() {
-	router := gin.Default()
-	renderer := loadTemplates()
-	router.HTMLRender = renderer
-
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", map[string]interface{}{
-			"Test": "hullo",
-		})
-	})
-
-	router.GET("/:page", func(c *gin.Context) {
-		page := strings.TrimSpace(filepath.Clean(c.Param("page")))
-		if page != c.Param("page") {
-			c.Redirect(http.StatusPermanentRedirect, page)
-			return
-		}
-		pageName := page
-		if strings.Contains(page, ".") {
-			pageName = page[:strings.Index(page, ".")]
-		}
-		if strings.HasSuffix(page, ".html") {
-			c.HTML(http.StatusOK, page, map[string]interface{}{})
-			return
-		}
-		if strings.HasSuffix(page, ".css") {
-			c.File("pages/" + pageName + "/" + pageName + ".css")
-			return
-		}
-		if strings.HasSuffix(page, ".bundle.js") {
-			c.Header("Content-Type", "text/javascript;charset=UTF-8")
-			c.File("static/" + page)
-			return
-		}
-	})
-
-	router.Run("0.0.0.0:8080")
-}
-
-func pageBundles(pageName string) ([]string, error) {
-	staticFiles, err := ioutil.ReadDir("static")
-	if err != nil {
-		return nil, err
-	}
-	var bundles []string
-	for _, f := range staticFiles {
-		if !strings.HasSuffix(f.Name(), ".bundle.js") {
-			continue
-		}
-		if strings.Contains(f.Name(), "~"+pageName+"~") || strings.Contains(f.Name(), "~"+pageName+".") {
-			bundles = append(bundles, f.Name())
-		}
-	}
-	return bundles, nil
-}
-
-func loadTemplates() render.HTMLRender {
-	r := multitemplate.NewRenderer()
-
-	layouts, err := filepath.Glob("pages/common/*.html")
-	if err != nil {
-		panic(err)
-	}
-
+func pageHtmlPaths() ([]string) {
 	var pages []string
-	err = filepath.Walk("pages", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk("pages", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -93,9 +30,38 @@ func loadTemplates() render.HTMLRender {
 	if err != nil {
 		panic(fmt.Errorf("could not read page files: %s", err.Error()))
 	}
+	return pages
+}
 
-	for _, page := range pages {
-		templateName := filepath.Base(page)
+func pageBundles(pageName string) ([]string, error) {
+	staticFiles, err := ioutil.ReadDir("static/bundles")
+	if err != nil {
+		return nil, err
+	}
+	var bundles []string
+	for _, f := range staticFiles {
+		if !strings.HasSuffix(f.Name(), ".bundle.js") {
+			continue
+		}
+		if f.Name() == pageName+".bundle.js" ||
+			strings.Contains(f.Name(), "~"+pageName+"~") ||
+			strings.Contains(f.Name(), "~"+pageName+".") {
+			bundles = append(bundles, f.Name())
+		}
+	}
+	return bundles, nil
+}
+
+func loadTemplates() render.HTMLRender {
+	r := multitemplate.NewRenderer()
+
+	layouts, err := filepath.Glob("pages/common/*.html")
+	if err != nil {
+		panic(err)
+	}
+
+	for _, pageHtmlPath := range pageHtmlPaths() {
+		templateName := filepath.Base(pageHtmlPath)
 		pageName := templateName
 		if strings.Contains(templateName, ".") {
 			pageName = templateName[:strings.Index(templateName, ".")]
@@ -105,8 +71,36 @@ func loadTemplates() render.HTMLRender {
 				"PageBundles": func() ([]string, error) {
 					return pageBundles(pageName)
 				},
-			}).ParseFiles(append(layouts, page)...))
+			}).ParseFiles(append(layouts, pageHtmlPath)...))
 		r.Add(templateName, tmpl)
 	}
 	return r
+}
+
+func main() {
+	router := gin.Default()
+	renderer := loadTemplates()
+	router.HTMLRender = renderer
+
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", map[string]interface{}{
+			"Test": "hullo",
+		})
+	})
+
+	for _, pageHtmlPath := range pageHtmlPaths() {
+		pageDir := filepath.Dir(pageHtmlPath)
+		pageName := filepath.Base(pageHtmlPath)
+		if strings.Contains(pageName, ".") {
+			pageName = pageName[:strings.Index(pageName, ".")]
+		}
+		router.GET("/"+pageName+".html", func(c *gin.Context) {
+			c.HTML(http.StatusOK, pageName+".html", nil)
+		})
+		router.StaticFile("/"+pageName+".css", pageDir+"/"+pageName+".css")
+	}
+
+	router.Static("/static", "static")
+
+	router.Run("0.0.0.0:8080")
 }

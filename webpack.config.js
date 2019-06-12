@@ -1,13 +1,11 @@
 const path = require('path');
+const glob = require("glob");
 
 module.exports = {
     mode: process.env.RUN_MODE === "prod" ? "production" : "development",
-    entry: {
-        index: "./app/pages/index/index.js",
-        download: "./app/pages/download/download.js",
-    },
+    entry: glob.sync('./app/pages/**/*.js'),
     output: {
-        path: path.resolve(__dirname, "app/static"),
+        path: path.resolve(__dirname, "app/static/bundles"),
         filename: "[name].bundle.js",
     },
     optimization: {
