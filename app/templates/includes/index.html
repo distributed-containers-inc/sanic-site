@@ -1,19 +1,14 @@
-{{define "extra_head"}}
-<link rel="stylesheet" href="static/css/asciinema-player.css">
-<link rel="stylesheet" href="static/css/index.css">
-{{end}}
-
 {{define "content"}}
-<div class="initial-content">
-    <div class="left">
-        Production ready building and deployment for Docker and Kubernetes
+<div class="content">
+    <h1>Trying to use Kubernetes to orchestrate your microservices?</h1>
+</div>
+<div class="content">
+    <div class="subcontent-left">
+        <h2>Sanic's got you covered with:</h2>
     </div>
-    <div class="right">
-        <asciinema-player src="static/asciinema/index.cast" speed="1.5"></asciinema-player>
-        <script src="static/js/asciinema-player.js"></script>
+    <div class="subcontent-right">
+        <div id="hello"></div>
     </div>
 </div>
-<div class="call-to-action-content">
-    Sanic makes it simple to build and deploy all of the services in your project at once.
-</div>
+<script src="static/js/bundle.js"></script>
 {{end}}

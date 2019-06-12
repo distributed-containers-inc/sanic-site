@@ -1,3 +1,6 @@
 environments:
   dev:
     clusterProvisioner: localdev
+    commands:
+      - name: webpack
+        command: "./node_modules/.bin/webpack $@"

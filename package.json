@@ -1,0 +1,22 @@
+{
+  "name": "sanic-site",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "latest",
+    "@babel/node": "latest",
+    "@babel/plugin-proposal-class-properties": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/preset-react": "latest",
+    "@material-ui/core": "latest",
+    "@material-ui/styles": "latest",
+    "babel-loader": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typeface-montserrat": "0.0.54"
+  },
+  "devDependencies": {
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.4"
+  }
+}

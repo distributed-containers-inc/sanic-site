@@ -1,5 +1,6 @@
 /.idea/
 /*.iml
 /logs
+/node_modules
 
 .fuse_hidden*
