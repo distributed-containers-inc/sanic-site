@@ -1,0 +1,17 @@
+{
+  "primary": {
+    "background": {
+      "light": "#46484E",
+      "main": "#2c2e33",
+      "dark": "#151519"
+    },
+    "text": {
+      "light": "#acc1cf",
+      "main": "#acc1cf",
+      "dark": "#8f9da6"
+    },
+    "error": {
+      "main": "#cf2c30"
+    }
+  }
+}

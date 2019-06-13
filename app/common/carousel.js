@@ -1,7 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 
 function SwipeableTextMobileStepper(props) {
@@ -22,10 +19,10 @@ function SwipeableTextMobileStepper(props) {
 
     return (
         <div>
-            <Button size="small" onClick={handleNext}
+            <button onClick={handleNext}
                     disabled={activeStep === maxSteps - 1}>
-                <KeyboardArrowLeft/> Next
-            </Button>
+                Next
+            </button>
             <SwipeableViews
                 axis='x'
                 index={activeStep}
@@ -34,10 +31,10 @@ function SwipeableTextMobileStepper(props) {
             >
                 {props.panels.map((panel, idx) => <div key={idx}>{panel}</div>)}
             </SwipeableViews>
-            <Button size="small" onClick={handleBack}
+            <button onClick={handleBack}
                     disabled={activeStep === 0}>
-                Back <KeyboardArrowRight/>
-            </Button>
+                Back
+            </button>
         </div>
     );
 }
