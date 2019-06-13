@@ -36,7 +36,7 @@ function SwipeableTextMobileStepper(props) {
             </SwipeableViews>
             <Button size="small" onClick={handleBack}
                     disabled={activeStep === 0}>
-                Back <KeyboardArrowLeft/>
+                Back <KeyboardArrowRight/>
             </Button>
         </div>
     );
