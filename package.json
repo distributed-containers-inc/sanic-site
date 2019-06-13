@@ -11,6 +11,7 @@
     "babel-loader": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-force-graph-2d": "^1.8.0",
     "react-swipeable-views": "^0.13.3",
     "react-terminal-component": "^1.4.0",
     "typeface-montserrat": "0.0.54"
