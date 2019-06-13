@@ -1,5 +1,6 @@
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import palette from './palette';
 
 function SwipeableTextMobileStepper(props) {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -18,22 +19,33 @@ function SwipeableTextMobileStepper(props) {
     }
 
     return (
-        <div>
-            <button onClick={handleNext}
-                    disabled={activeStep === maxSteps - 1}>
-                Next
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+            <button onClick={handleBack}
+                    disabled={activeStep === 0}
+                    style={{
+                        backgroundColor: palette.primary.background.main,
+                        color: palette.primary.text.main,
+                        border: '0'
+                    }}>
+                &lt;
             </button>
             <SwipeableViews
                 axis='x'
                 index={activeStep}
                 onChangeIndex={handleStepChange}
                 enableMouseEvents
+                style={{width: '100%'}}
             >
                 {props.panels.map((panel, idx) => <div key={idx}>{panel}</div>)}
             </SwipeableViews>
-            <button onClick={handleBack}
-                    disabled={activeStep === 0}>
-                Back
+            <button onClick={handleNext}
+                    disabled={activeStep === maxSteps - 1}
+                    style={{
+                        backgroundColor: palette.primary.background.main,
+                        color: palette.primary.text.main,
+                        border: '0'
+                    }}>
+                &gt;
             </button>
         </div>
     );
