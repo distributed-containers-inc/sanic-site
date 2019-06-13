@@ -14,3 +14,7 @@
 .column {
     flex-direction: column;
 }
+
+.terminalContainer {
+    overflow-y: hidden !important;
+}

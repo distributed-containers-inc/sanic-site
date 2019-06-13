@@ -12,9 +12,12 @@
     "@material-ui/icons": "^4.1.0",
     "@material-ui/styles": "latest",
     "babel-loader": "latest",
+    "javascript-terminal": "^1.0.2",
     "react": "latest",
     "react-dom": "latest",
     "react-swipeable-views": "^0.13.3",
+    "react-terminal-component": "^1.4.0",
+    "terminal-in-react": "^4.3.1",
     "typeface-montserrat": "0.0.54"
   },
   "devDependencies": {
