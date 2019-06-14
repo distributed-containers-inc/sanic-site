@@ -9,6 +9,7 @@
     "@babel/preset-env": "latest",
     "@babel/preset-react": "latest",
     "babel-loader": "latest",
+    "javascript-terminal": "^1.0.2",
     "react": "latest",
     "react-dom": "latest",
     "react-force-graph-2d": "^1.8.0",

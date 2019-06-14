@@ -1,11 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Carousel from '../../common/carousel';
-import palette from '../../common/palette';
-import ReactTerminal from 'react-terminal-component';
 import ForceGraph2D from 'react-force-graph-2d';
+import IndexTerminal from './index_terminal'
 
-class ForceGraphEnvironment extends React.Component {
+const environments = [
+    {
+        'name': 'dev',
+        'machines': 3
+    },
+    {
+        'name': 'staging',
+        'machines': 1
+    },
+    {
+        'name': 'prod',
+        'machines': 5
+    }
+];
+
+class EnvironmentForceGraph extends React.Component {
     constructor(props) {
         super(props);
         this.forceGraph = React.createRef();
@@ -22,8 +36,8 @@ class ForceGraphEnvironment extends React.Component {
                     ref={this.forceGraph}
                     linkDirectionalParticles={2}
                     graphData={{
-                        nodes: [{id: 1}, {id: 2}],
-                        links: [{source: 1, target: 2}]
+                        nodes: Array(this.props.machines).fill(null).map((_, idx) => ({id: idx})),
+                        links: []
                     }}
                     width={150}
                     height={150}
@@ -34,6 +48,17 @@ class ForceGraphEnvironment extends React.Component {
             </div>
         )
     }
+}
+
+function createEnvForceGraph(env) {
+    return (
+        <EnvironmentForceGraph
+            name={env.name}
+            key={env.name}
+            machines={env.machines}
+            style={{marginTop: 'auto', marginBottom: 'auto'}}
+        />
+    )
 }
 
 function SanicFeatures() {
@@ -48,31 +73,14 @@ function SanicFeatures() {
                     <h2 style={{textAlign: 'center'}}>A rich environment
                         system</h2>,
                 ]}/>
-                <ReactTerminal
-                    autoFocus={false}
-                    clickToFocus={true}
-                    theme={{
-                        background: palette.primary.background.dark,
-                        promptSymbolColor: palette.primary.text.main,
-                        commandColor: palette.primary.text.main,
-                        outputColor: palette.primary.text.main,
-                        errorOutputColor: palette.primary.error.main,
-                        fontSize: '1.1rem',
-                        spacing: '1%',
-                        fontFamily: 'monospace',
-                        width: '98%',
-                        height: '6em',
-                    }}
-                />
+                <IndexTerminal />
             </div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 width: '25%'
             }}>
-                <ForceGraphEnvironment name='dev' style={{marginTop: 'auto', marginBottom: 'auto'}}/>
-                <ForceGraphEnvironment name='staging' style={{marginTop: 'auto', marginBottom: 'auto'}}/>
-                <ForceGraphEnvironment name='prod' style={{marginTop: 'auto', marginBottom: 'auto'}}/>
+                {environments.map(createEnvForceGraph)}
             </div>
         </div>
     );
