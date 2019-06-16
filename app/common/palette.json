@@ -1,8 +1,8 @@
 {
   "primary": {
     "background": {
-      "light": "#46484E",
-      "main": "#2c2e33",
+      "light": "#2c2e33",
+      "main": "#26282d",
       "dark": "#151519"
     },
     "text": {

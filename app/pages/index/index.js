@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Carousel from '../../common/carousel';
-import ForceGraph2D from 'react-force-graph-2d';
-import IndexTerminal from './index_terminal'
+import IndexTerminal from './index-terminal';
+import {InfrastructureDiagram} from '../../common/infrastructure-diagram';
+import SwipableCarousel from '../../common/carousel';
 
 const environments = [
     {
@@ -19,37 +19,6 @@ const environments = [
     }
 ];
 
-class EnvironmentForceGraph extends React.Component {
-    constructor(props) {
-        super(props);
-        this.forceGraph = React.createRef();
-    }
-
-    componentDidMount() {
-        this.forceGraph.current.zoom(1)
-    }
-
-    render() {
-        return (
-            <div style={{display: 'flex', flexDirection: 'row'}}>
-                <ForceGraph2D
-                    ref={this.forceGraph}
-                    linkDirectionalParticles={2}
-                    graphData={{
-                        nodes: Array(this.props.machines).fill(null).map((_, idx) => ({id: idx})),
-                        links: []
-                    }}
-                    width={150}
-                    height={150}
-                />
-                <span style={{marginTop: 'auto', marginBottom: 'auto'}}>
-                {this.props.name}
-                </span>
-            </div>
-        )
-    }
-}
-
 function createEnvForceGraph(env) {
     return (
         <EnvironmentForceGraph
@@ -63,25 +32,13 @@ function createEnvForceGraph(env) {
 
 function SanicFeatures() {
     return (
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-            <div style={{display: 'flex', flexDirection: 'column', width: '75%'}}>
-                <Carousel variant="contained" color="primary" panels={[
-                    <h2 style={{textAlign: 'center'}}>A rich environment
-                        system</h2>,
-                    <h2 style={{textAlign: 'center'}}>A rich environment
-                        system</h2>,
-                    <h2 style={{textAlign: 'center'}}>A rich environment
-                        system</h2>,
-                ]}/>
-                <IndexTerminal />
-            </div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '25%'
-            }}>
-                {environments.map(createEnvForceGraph)}
-            </div>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+            <IndexTerminal/>
+            <SwipableCarousel>
+                <InfrastructureDiagram title='dev'/>
+                <InfrastructureDiagram title='staging'/>
+                <InfrastructureDiagram title='prod'/>
+            </SwipableCarousel>
         </div>
     );
 }

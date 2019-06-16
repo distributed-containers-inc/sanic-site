@@ -4,7 +4,7 @@ import palette from './palette';
 
 function SwipeableTextMobileStepper(props) {
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = props.panels.length;
+    const maxSteps = props.children.length;
 
     function handleNext() {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -35,8 +35,9 @@ function SwipeableTextMobileStepper(props) {
                 onChangeIndex={handleStepChange}
                 enableMouseEvents
                 style={{width: '100%'}}
+                animateHeight={true}
             >
-                {props.panels.map((panel, idx) => <div key={idx}>{panel}</div>)}
+                {props.children}
             </SwipeableViews>
             <button onClick={handleNext}
                     disabled={activeStep === maxSteps - 1}

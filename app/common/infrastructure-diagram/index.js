@@ -1,0 +1,1 @@
+export {default as InfrastructureDiagram} from './infrastructure-diagram'
