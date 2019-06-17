@@ -10,15 +10,51 @@ class InfrastructureDiagram extends React.Component {
     }
 
     generateGraphData() {
+        let id = 0;
+        let nodes = [];
+        let links = [];
+
+        for (let machine of this.props.machines) {
+            machine.id = id++;
+        }
+        for (let machine of this.props.machines) {
+            nodes.push({
+                           id: machine.id,
+                           name: machine.name,
+                           val: 8,
+                           color: '#ccc970'
+                       });
+            for (let otherMachine of this.props.machines) {
+                if (otherMachine !== machine) {
+                    links.push({
+                                   'source': machine.id,
+                                   'target': otherMachine.id,
+                                   color: palette.primary.text.dark
+                               })
+                }
+            }
+        }
+        nodes[0].position = 'center';
         return {
             nodes: [
-                {id: 1, name: "Developer PC", position: 'top-top-center', val: 2},
-                {id: 2, name: "node 2", val: 5},
-                {id: 3, name: "node 3", val: 5},
-                {id: 4, name: "Registry", position: "center-left", val: 15}],
+                {
+                    id: 500,
+                    name: "Developer PC",
+                    position: 'top-top-center',
+                    val: 2
+                },
+                {
+                    id: 501,
+                    name: "Registry",
+                    position: "center-left",
+                    val: 15,
+                    color: "#cc7078",
+                },
+                ...nodes
+            ],
             links: [
-                {source: 1, target: 2},
-                {source: 3, target: 2}]
+                ...links
+            ]
         }
     }
 
@@ -37,14 +73,14 @@ class InfrastructureDiagram extends React.Component {
             return {
                 "top-top-center": {
                     x: 0,
-                    y: -0.175*diagram.state.height
+                    y: -0.175 * diagram.state.height
                 },
                 "center": {
                     x: 0,
                     y: 0
                 },
                 "center-left": {
-                    x: -0.15*diagram.state.width,
+                    x: -0.15 * diagram.state.width,
                     y: 0
                 },
             }
@@ -54,7 +90,7 @@ class InfrastructureDiagram extends React.Component {
             let positions = getPositions();
             for (let node of nodes) {
                 let pos = positions[node.position];
-                if(pos) {
+                if (pos) {
                     node.vx += (pos.x - node.x) * alpha;
                     node.vy += (pos.y - node.y) * alpha;
                 }
@@ -73,21 +109,21 @@ class InfrastructureDiagram extends React.Component {
         let diagram = this;
 
         function force(alpha) {
-            for(let node of nodes) {
-                if(node.x < -.18*diagram.state.width) {
+            for (let node of nodes) {
+                if (node.x < -.18 * diagram.state.width) {
                     node.x += 10 * alpha;
-                } else if(node.x > .18*diagram.state.width) {
+                } else if (node.x > .18 * diagram.state.width) {
                     node.x -= 10 * alpha;
                 }
-                if(node.y < -.18*diagram.state.height) {
+                if (node.y < -.18 * diagram.state.height) {
                     node.y += 10 * alpha;
-                } else if(node.y > .18*diagram.state.height) {
+                } else if (node.y > .18 * diagram.state.height) {
                     node.y -= 10 * alpha;
                 }
             }
         }
 
-        force.initialize = function(_) {
+        force.initialize = function (_) {
             nodes = _;
         };
 
@@ -96,13 +132,18 @@ class InfrastructureDiagram extends React.Component {
 
     componentDidMount() {
         this.updateDimensions();
-        window.addEventListener("resize", () => {this.updateDimensions()});
+        window.addEventListener("resize", () => {
+            this.updateDimensions()
+        });
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
         this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
+        this.graphRef.current.zoom(2.5);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", () => {this.updateDimensions()});
+        window.removeEventListener("resize", () => {
+            this.updateDimensions()
+        });
     }
 
     render() {
@@ -112,6 +153,7 @@ class InfrastructureDiagram extends React.Component {
                 width={this.state && this.state.width || window.outerWidth}
                 height={this.state && this.state.height || window.outerHeight}
                 graphData={this.generateGraphData()}
+                nodeOpacity={1}
                 linkWidth={5}
                 enableNavigationControls={false}
                 enableZoomPanInteraction={false}
@@ -120,13 +162,13 @@ class InfrastructureDiagram extends React.Component {
 
         return (
             <div style={{
-                     width: '100%',
-                     height: '30em',
-                     backgroundColor: palette.primary.background.main,
-                     content: 'border-box',
-                     paddingTop: '1em',
-                     paddingBottom: '4.5em',
-                 }}>
+                width: '100%',
+                height: '30em',
+                backgroundColor: palette.primary.background.main,
+                content: 'border-box',
+                paddingTop: '1em',
+                paddingBottom: '4.5em',
+            }}>
                 {this.props.title ? (
                     <h2 style={{
                         textAlign: 'center',
@@ -134,8 +176,9 @@ class InfrastructureDiagram extends React.Component {
                         margin: '0'
                     }}>{this.props.title}</h2>
                 ) : null}
-                <div ref={this.containerRef} style={{width: '100%', height: '100%'}}>
-                {canvas}
+                <div ref={this.containerRef}
+                     style={{width: '100%', height: '100%'}}>
+                    {canvas}
                 </div>
             </div>
         )
