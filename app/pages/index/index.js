@@ -54,21 +54,36 @@ const environments = [
     },
 ];
 
-function SanicFeatures() {
-    return (
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-            <IndexTerminal/>
-            <SwipableCarousel>
-                {environments.map(env => (
-                    <InfrastructureDiagram
-                        title={"Environment: " + env.name}
-                        machines={env.machines}
-                        key={env.name}
-                    />
-                ))}
-            </SwipableCarousel>
-        </div>
-    );
+class SanicFeatures extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.terminalRef = React.createRef();
+        this.carouselRef = React.createRef();
+        this.diagramRef = React.createRef();
+    }
+
+    componentDidMount() {
+
+    }
+
+    render() {
+        return (
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+                <IndexTerminal ref={this.terminalRef}/>
+                <SwipableCarousel ref={this.carouselRef}>
+                    {environments.map(env => (
+                        <InfrastructureDiagram
+                            title={"Environment: " + env.name}
+                            machines={env.machines}
+                            key={env.name}
+                            ref={this.diagramRef}
+                        />
+                    ))}
+                </SwipableCarousel>
+            </div>
+        );
+    }
 }
 
 ReactDOM.render(
