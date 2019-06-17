@@ -37,7 +37,23 @@ export default class IndexTerminal extends React.Component {
     }
 
     sanicBuildCommand(state, opts) {
-        return this.sanicHelp(); //TODO
+        if (opts.length > 1 || (opts.length === 1 && opts[0] !== '--push')) {
+            return {
+                outputs: [OutputFactory.makeTextOutput(
+                    "Usage: sanic build (--push)"
+                )]
+            }
+        }
+        let push = (opts.length === 1 && opts[0] === '--push');
+        let builtServices = this.props.onBuild(push);
+        return {
+            outputs: [OutputFactory.makeTextOutput(
+                "Built "
+                + "" + builtServices.join(", ")
+                + (push ? ", pushed them and to the registry"
+                        : ", and stored them to the local docker daemon. Try sanic build --push as well.")
+            )]
+        }
     }
 
     sanicDeployCommand(state, opts) {
@@ -54,9 +70,10 @@ export default class IndexTerminal extends React.Component {
                 )]
             }
         }
-        this.props.setEnv(opts[0]);
+        this.props.onEnv(opts[0]);
         return [OutputFactory.makeTextOutput(
-            "The environment is now "+opts[0]+". Notice: build & deploy commands will now affect the registry & machines for this environment."
+            "The environment is now " + opts[0]
+            + ". Notice: build & deploy commands will now affect the registry & machines for this environment."
         )]
     }
 

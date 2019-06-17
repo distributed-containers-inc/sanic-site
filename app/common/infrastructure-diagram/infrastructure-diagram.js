@@ -2,24 +2,34 @@ import React from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import palette from '../palette'
 
+const DEVELOPER_PC_ID = 'dev-pc';
+const REGISTRY_ID = 'registry';
+
 class InfrastructureDiagram extends React.Component {
     constructor(props) {
         super(props);
         this.graphRef = React.createRef();
         this.containerRef = React.createRef();
+        this.state = {
+            width: window.outerWidth,
+            height: window.outerHeight,
+            registryImages: [],
+            localImages: [],
+        };
+        this.state.graphData=this.generateGraphData();
     }
 
-    generateGraphData() {
-        let id = 0;
+    generateGraphData(args) {
+        args = args || {};
         let nodes = [];
         let links = [];
 
-        for (let machine of this.props.machines) {
-            machine.id = id++;
+        for (let i = 0; i < this.props.machines.length; i++) {
+            this.props.machines[i].id = i;
         }
         for (let machine of this.props.machines) {
             nodes.push({
-                           id: machine.id,
+                           id: 'machine-' + machine.id,
                            name: machine.name,
                            val: 8,
                            color: '#ccc970'
@@ -27,24 +37,59 @@ class InfrastructureDiagram extends React.Component {
             for (let otherMachine of this.props.machines) {
                 if (otherMachine !== machine) {
                     links.push({
-                                   'source': machine.id,
-                                   'target': otherMachine.id,
+                                   source: 'machine-' + machine.id,
+                                   target: 'machine-' + otherMachine.id,
                                    color: palette.primary.text.dark
                                })
                 }
             }
         }
+
+        let registryImages = [...this.state.registryImages, ...(args.registryImages || [])];
+        for (let i = 0; i < registryImages.length; i++) {
+            let id = 'registry-image-' + i;
+            let img = registryImages[i];
+            nodes.push({
+                           id: id,
+                           name: 'Image ' + img + ":latest",
+                           val: 2,
+                           color: '#5cb9cc'
+                       });
+            links.push({
+                           source: id,
+                           target: REGISTRY_ID,
+                           color: palette.primary.text.dark
+                       });
+        }
+
+        let localImages = [...this.state.localImages, ...(args.localImages || [])];
+        for (let i = 0; i < localImages.length; i++) {
+            let id = 'local-image-' + i;
+            let img = localImages[i];
+            nodes.push({
+                           id: id,
+                           name: 'Image ' + img + ":latest",
+                           val: 2,
+                           color: '#5cb9cc'
+                       });
+            links.push({
+                           source: id,
+                           target: DEVELOPER_PC_ID,
+                           color: palette.primary.text.dark
+                       });
+        }
+
         nodes[0].position = 'center';
         return {
             nodes: [
                 {
-                    id: 500,
+                    id: DEVELOPER_PC_ID,
                     name: "Developer PC",
-                    position: 'top-top-center',
-                    val: 2
+                    position: 'top-center',
+                    val: 8,
                 },
                 {
-                    id: 501,
+                    id: REGISTRY_ID,
                     name: "Registry",
                     position: "center-left",
                     val: 15,
@@ -56,6 +101,22 @@ class InfrastructureDiagram extends React.Component {
                 ...links
             ]
         }
+    }
+
+    setLocalImages(images) {
+        this.setState(
+            {
+                localImages: images,
+                graphData: this.generateGraphData({localImages: images})
+            });
+    }
+
+    setPushedImages(images) {
+        this.setState(
+            {
+                registryImages: images,
+                graphData: this.generateGraphData({registryImages: images})
+            });
     }
 
     updateDimensions() {
@@ -71,9 +132,9 @@ class InfrastructureDiagram extends React.Component {
 
         const getPositions = () => {
             return {
-                "top-top-center": {
+                "top-center": {
                     x: 0,
-                    y: -0.175 * diagram.state.height
+                    y: -0.14 * diagram.state.height
                 },
                 "center": {
                     x: 0,
@@ -150,9 +211,9 @@ class InfrastructureDiagram extends React.Component {
         const canvas = (
             <ForceGraph2D
                 ref={this.graphRef}
-                width={this.state && this.state.width || window.outerWidth}
-                height={this.state && this.state.height || window.outerHeight}
-                graphData={this.generateGraphData()}
+                width={this.state.width}
+                height={this.state.height}
+                graphData={this.state.graphData}
                 nodeOpacity={1}
                 linkWidth={5}
                 enableNavigationControls={false}

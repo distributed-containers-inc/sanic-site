@@ -55,16 +55,28 @@ class SanicFeatures extends React.Component {
         },
     ];
 
+    images = ["web", "api", "redis"];
+
     constructor(props) {
         super(props);
 
         this.terminalRef = React.createRef();
         this.carouselRef = React.createRef();
-        this.diagramRef = React.createRef();
+        for(let environment of this.environments) {
+            environment.diagramRef = React.createRef();
+        }
 
         this.state = {
             currentEnv: 0
         }
+    }
+
+    currentEnvironment() {
+        return this.environments[this.carouselRef.current.state.step]
+    }
+
+    currentEnvironmentDiagram() {
+        return this.currentEnvironment().diagramRef.current;
     }
 
     render() {
@@ -73,14 +85,22 @@ class SanicFeatures extends React.Component {
                 <IndexTerminal
                     ref={this.terminalRef}
                     validEnvs={this.environments.map(e => e.name)}
-                    setEnv={(envName) => {
+                    onEnv={(envName) => {
                         let i = 0;
-                        for(let env of this.environments) {
-                            if(env.name === envName) {
+                        for (let env of this.environments) {
+                            if (env.name === envName) {
                                 this.carouselRef.current.setState({step: i})
                             }
                             i++;
                         }
+                    }}
+                    onBuild={(doPush) => {
+                        if(doPush) {
+                            this.currentEnvironmentDiagram().setPushedImages(this.images);
+                        } else {
+                            this.currentEnvironmentDiagram().setLocalImages(this.images);
+                        }
+                        return this.images;
                     }}
                 />
                 <SwipableCarousel
@@ -91,7 +111,7 @@ class SanicFeatures extends React.Component {
                             title={"Environment: " + env.name}
                             machines={env.machines}
                             key={env.name}
-                            ref={this.diagramRef}
+                            ref={env.diagramRef}
                         />
                     ))}
                 </SwipableCarousel>
