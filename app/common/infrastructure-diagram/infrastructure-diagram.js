@@ -45,7 +45,7 @@ class InfrastructureDiagram extends React.Component {
             }
         }
 
-        let registryImages = [...this.state.registryImages, ...(args.registryImages || [])];
+        let registryImages = args.registryImages || this.state.registryImages || [];
         for (let i = 0; i < registryImages.length; i++) {
             let id = 'registry-image-' + i;
             let img = registryImages[i];
@@ -62,7 +62,7 @@ class InfrastructureDiagram extends React.Component {
                        });
         }
 
-        let localImages = [...this.state.localImages, ...(args.localImages || [])];
+        let localImages = args.localImages || this.state.localImages || [];
         for (let i = 0; i < localImages.length; i++) {
             let id = 'local-image-' + i;
             let img = localImages[i];
@@ -79,7 +79,7 @@ class InfrastructureDiagram extends React.Component {
                        });
         }
 
-        nodes[0].position = 'center';
+        nodes[0].position = 'bottom-center';
         return {
             nodes: [
                 {
@@ -134,7 +134,7 @@ class InfrastructureDiagram extends React.Component {
             return {
                 "top-center": {
                     x: 0,
-                    y: -0.14 * diagram.state.height
+                    y: -0.12 * diagram.state.height
                 },
                 "center": {
                     x: 0,
@@ -143,6 +143,10 @@ class InfrastructureDiagram extends React.Component {
                 "center-left": {
                     x: -0.15 * diagram.state.width,
                     y: 0
+                },
+                "bottom-center": {
+                    x: 0,
+                    y: 0.12 * diagram.state.height
                 },
             }
         };
@@ -172,14 +176,14 @@ class InfrastructureDiagram extends React.Component {
         function force(alpha) {
             for (let node of nodes) {
                 if (node.x < -.18 * diagram.state.width) {
-                    node.x += 10 * alpha;
+                    node.vx += 10 * alpha;
                 } else if (node.x > .18 * diagram.state.width) {
-                    node.x -= 10 * alpha;
+                    node.vx -= 10 * alpha;
                 }
                 if (node.y < -.18 * diagram.state.height) {
-                    node.y += 10 * alpha;
+                    node.vy += 10 * alpha;
                 } else if (node.y > .18 * diagram.state.height) {
-                    node.y -= 10 * alpha;
+                    node.vy -= 10 * alpha;
                 }
             }
         }
