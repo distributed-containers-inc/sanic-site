@@ -37,14 +37,14 @@ class InfrastructureDiagram extends React.Component {
             return {
                 "top-top-center": {
                     x: 0,
-                    y: -0.18*diagram.state.height
+                    y: -0.175*diagram.state.height
                 },
                 "center": {
                     x: 0,
                     y: 0
                 },
                 "center-left": {
-                    x: -0.18*diagram.state.width,
+                    x: -0.15*diagram.state.width,
                     y: 0
                 },
             }
@@ -70,10 +70,12 @@ class InfrastructureDiagram extends React.Component {
 
     componentDidMount() {
         this.updateDimensions();
+        window.addEventListener("resize", () => {this.updateDimensions()});
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
     }
 
     componentWillUnmount() {
+        window.removeEventListener("resize", () => {this.updateDimensions()});
     }
 
     render() {
@@ -89,13 +91,13 @@ class InfrastructureDiagram extends React.Component {
         );
 
         return (
-            <div ref={this.containerRef}
-                 style={{
+            <div style={{
                      width: '100%',
                      height: '30em',
                      backgroundColor: palette.primary.background.main,
                      content: 'border-box',
-                     paddingTop: '1em'
+                     paddingTop: '1em',
+                     paddingBottom: '4.5em',
                  }}>
                 {this.props.title ? (
                     <h2 style={{
@@ -104,7 +106,9 @@ class InfrastructureDiagram extends React.Component {
                         margin: '0'
                     }}>{this.props.title}</h2>
                 ) : null}
+                <div ref={this.containerRef} style={{width: '100%', height: '100%'}}>
                 {canvas}
+                </div>
             </div>
         )
     }
