@@ -12,10 +12,10 @@ class InfrastructureDiagram extends React.Component {
     generateGraphData() {
         return {
             nodes: [
-                {id: 1, name: "Developer PC", position: 'top-top-center'},
-                {id: 2, name: "node 2"},
-                {id: 3, name: "node 3"},
-                {id: 4, name: "Registry", position: "center-left"}],
+                {id: 1, name: "Developer PC", position: 'top-top-center', val: 2},
+                {id: 2, name: "node 2", val: 5},
+                {id: 3, name: "node 3", val: 5},
+                {id: 4, name: "Registry", position: "center-left", val: 15}],
             links: [
                 {source: 1, target: 2},
                 {source: 3, target: 2}]
@@ -112,6 +112,7 @@ class InfrastructureDiagram extends React.Component {
                 width={this.state && this.state.width || window.outerWidth}
                 height={this.state && this.state.height || window.outerHeight}
                 graphData={this.generateGraphData()}
+                linkWidth={5}
                 enableNavigationControls={false}
                 enableZoomPanInteraction={false}
             />
