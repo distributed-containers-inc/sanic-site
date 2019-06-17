@@ -29,91 +29,110 @@ environments:
       command: "echo hello"
 `.trim();
 
-function sanicHelp() {
-    return {
-        outputs: [OutputFactory.makeTextOutput(helpMessage)]
+export default class IndexTerminal extends React.Component {
+    sanicHelp() {
+        return {
+            outputs: [OutputFactory.makeTextOutput(helpMessage)]
+        }
     }
-}
 
-function sanicBuildCommand(state, opts) {
-    return sanicHelp(); //TODO
-}
-
-function sanicDeployCommand(state, opts) {
-    return sanicHelp(); //TODO
-}
-
-function sanicEnvCommand(state, opts) {
-    return sanicHelp(); //TODO
-}
-
-function sanicCommand(state, opts) {
-    if (opts.length === 0) {
-        return sanicHelp();
+    sanicBuildCommand(state, opts) {
+        return this.sanicHelp(); //TODO
     }
-    let subcommand = opts[0];
-    opts.shift();
-    switch (subcommand) {
-        case "build":
-            return sanicBuildCommand(state, opts);
-        case "deploy":
-            return sanicDeployCommand(state, opts);
-        case "env":
-            return sanicEnvCommand(state, opts);
+
+    sanicDeployCommand(state, opts) {
+        return this.sanicHelp(); //TODO
     }
-    return sanicHelp();
-}
 
-function generateState() {
-    let fs = FileSystem.create(
-        {
-            '/sanic-example': {},
-            '/sanic-example/sanic.yaml': {
-                content: sanicYaml
-            },
-        });
-
-    let commandMapping = CommandMapping.create(
-        {
-            ...defaultCommandMapping,
-            'sanic': {
-                'function': sanicCommand,
-                'optDef': {}
+    sanicEnvCommand(state, opts) {
+        if (opts.length !== 1 || !this.props.validEnvs.includes(opts[0])) {
+            return {
+                outputs: [OutputFactory.makeTextOutput(
+                    "Usage: sanic env ["
+                    + this.props.validEnvs.join("|")
+                    + "]"
+                )]
             }
-        });
+        }
+        this.props.setEnv(opts[0]);
+        return [OutputFactory.makeTextOutput(
+            "The environment is now "+opts[0]+". Notice: build & deploy commands will now affect the registry & machines for this environment."
+        )]
+    }
 
-    return EmulatorState.create(
-        {
-            'fs': fs,
-            'commandMapping': commandMapping
-        })
-}
+    sanicCommand(state, opts) {
+        try {
+            if (opts.length === 0) {
+                return this.sanicHelp();
+            }
+            let subcommand = opts[0];
+            opts.shift();
+            switch (subcommand) {
+                case "build":
+                    return this.sanicBuildCommand(state, opts);
+                case "deploy":
+                    return this.sanicDeployCommand(state, opts);
+                case "env":
+                    return this.sanicEnvCommand(state, opts);
+            }
+        } catch (e) {
+            console.error(e.message);
+            console.trace();
+        }
+        return this.sanicHelp();
+    }
 
-export default function (props) {
-    return (
-        <div style={{
-            backgroundColor: palette.primary.background.dark,
-            paddingTop: '0.3em',
-            paddingBottom: '0.3em',
-        }}>
-            <ReactTerminal
-                autoFocus={false}
-                clickToFocus={true}
-                theme={{
-                    background: palette.primary.background.dark,
-                    promptSymbolColor: palette.primary.text.main,
-                    commandColor: palette.primary.text.main,
-                    outputColor: palette.primary.text.main,
-                    errorOutputColor: palette.primary.error.main,
-                    fontSize: '1.1rem',
-                    spacing: '1%',
-                    fontFamily: 'monospace',
-                    width: '98%',
-                    height: '9.6em',
-                }}
-                inputStr='sanic env prod'
-                emulatorState={generateState()}
-            />
-        </div>
-    )
+    generateState() {
+        let fs = FileSystem.create(
+            {
+                '/sanic-example': {},
+                '/sanic-example/sanic.yaml': {
+                    content: sanicYaml
+                },
+            });
+
+        let commandMapping = CommandMapping.create(
+            {
+                ...defaultCommandMapping,
+                'sanic': {
+                    'function': this.sanicCommand.bind(this),
+                    'optDef': {}
+                }
+            });
+
+        return EmulatorState.create(
+            {
+                'fs': fs,
+                'commandMapping': commandMapping
+            })
+    }
+
+    render() {
+        return (
+            <div style={{
+                backgroundColor: palette.primary.background.dark,
+                paddingTop: '0.3em',
+                paddingBottom: '0.3em',
+            }}>
+                <ReactTerminal
+                    autoFocus={false}
+                    clickToFocus={true}
+                    theme={{
+                        background: palette.primary.background.dark,
+                        promptSymbolColor: palette.primary.text.main,
+                        commandColor: palette.primary.text.main,
+                        outputColor: palette.primary.text.main,
+                        errorOutputColor: palette.primary.error.main,
+                        fontSize: '1.1rem',
+                        spacing: '1%',
+                        fontFamily: 'monospace',
+                        width: '98%',
+                        height: '9.6em',
+                    }}
+                    inputStr='sanic env prod'
+                    emulatorState={this.generateState()}
+                />
+            </div>
+        )
+    }
 }
