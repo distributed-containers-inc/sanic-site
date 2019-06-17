@@ -68,10 +68,37 @@ class InfrastructureDiagram extends React.Component {
         return force;
     }
 
+    forceWallRepeller() {
+        let nodes;
+        let diagram = this;
+
+        function force(alpha) {
+            for(let node of nodes) {
+                if(node.x < -.18*diagram.state.width) {
+                    node.x += 10 * alpha;
+                } else if(node.x > .18*diagram.state.width) {
+                    node.x -= 10 * alpha;
+                }
+                if(node.y < -.18*diagram.state.height) {
+                    node.y += 10 * alpha;
+                } else if(node.y > .18*diagram.state.height) {
+                    node.y -= 10 * alpha;
+                }
+            }
+        }
+
+        force.initialize = function(_) {
+            nodes = _;
+        };
+
+        return force;
+    }
+
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", () => {this.updateDimensions()});
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
+        this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
     }
 
     componentWillUnmount() {
