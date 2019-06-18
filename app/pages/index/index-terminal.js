@@ -1,6 +1,6 @@
 import React from "react";
 import palette from "../../common/palette";
-import ReactTerminal from "react-terminal-component";
+import {ReactTerminalStateless} from "react-terminal-component";
 import {
     CommandMapping,
     defaultCommandMapping,
@@ -29,7 +29,27 @@ environments:
       command: "echo hello"
 `.trim();
 
+class NoScrollTerminal extends ReactTerminalStateless {
+    //TODO HACK: scroll is really jumpy and confusing without this
+    //remove when https://github.com/rohanchandra/react-terminal-component/pull/17 is merged
+    componentDidUpdate() {
+        let input = document.querySelector(".terminalContainer");
+        if(input) {
+            input.scrollTop = input.scrollHeight;
+        }
+    }
+}
+
 export default class IndexTerminal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            emulatorState: this.generateState()
+        };
+        this.terminalRef = React.createRef();
+    }
+
     sanicHelp() {
         return {
             outputs: [OutputFactory.makeTextOutput(helpMessage)]
@@ -51,7 +71,7 @@ export default class IndexTerminal extends React.Component {
                 "Built "
                 + builtServices.join(", ")
                 + (push ? ", pushed them and to the registry"
-                        : ", and stored them to the local docker daemon. Try sanic build --push as well.")
+                        : ", and stored them to the local docker daemon.\nTry sanic build --push as well.")
             )]
         }
     }
@@ -147,10 +167,11 @@ export default class IndexTerminal extends React.Component {
                 paddingTop: '0.3em',
                 paddingBottom: '0.3em',
             }}>
-                <ReactTerminal
+                <NoScrollTerminal
                     autoFocus={false}
                     clickToFocus={true}
                     promptSymbol={'[' + this.props.env + '] demo$'}
+                    ref={this.terminalRef}
                     theme={{
                         background: palette.primary.background.dark,
                         promptSymbolColor: palette.primary.text.main,
@@ -163,7 +184,10 @@ export default class IndexTerminal extends React.Component {
                         width: '98%',
                         height: '9.6em',
                     }}
-                    emulatorState={this.generateState()}
+                    onInputChange={(inputStr) => this.setState({inputStr})}
+                    inputStr={this.state.inputStr}
+                    onStateChange={(emulatorState) => this.setState({emulatorState, inputStr: ''})}
+                    emulatorState={this.state.emulatorState}
                 />
             </div>
         )

@@ -77,7 +77,12 @@ class SanicFeatures extends React.Component {
 
     render() {
         return (
-            <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div
+                style={{display: 'flex', flexDirection: 'column'}}
+                onClick={(e) => {
+                    e.currentTarget.scrollIntoView();
+                }}
+            >
                 <IndexTerminal
                     ref={this.terminalRef}
                     env={this.currentEnvironment().name}
