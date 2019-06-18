@@ -32,12 +32,7 @@ class SanicFeatures extends React.Component {
             'name': 'prod',
             'machines': [
                 {
-                    "name": "Production server #1",
-                    "containers": [
-                        {
-                            "name": "Ingress controller"
-                        }
-                    ]
+                    "name": "Production server #1"
                 },
                 {
                     "name": "Production server #2"
@@ -56,6 +51,7 @@ class SanicFeatures extends React.Component {
     ];
 
     images = ["web", "api", "redis"];
+    pushedImages = [];
 
     constructor(props) {
         super(props);
@@ -72,7 +68,7 @@ class SanicFeatures extends React.Component {
     }
 
     currentEnvironment() {
-        return this.environments[this.carouselRef.current.state.step]
+        return this.environments[this.state.currentEnv];
     }
 
     currentEnvironmentDiagram() {
@@ -84,12 +80,14 @@ class SanicFeatures extends React.Component {
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <IndexTerminal
                     ref={this.terminalRef}
+                    env={this.currentEnvironment().name}
                     validEnvs={this.environments.map(e => e.name)}
                     onEnv={(envName) => {
                         let i = 0;
                         for (let env of this.environments) {
                             if (env.name === envName) {
-                                this.carouselRef.current.setState({step: i})
+                                this.carouselRef.current.setState({step: i});
+                                this.setState({currentEnv: i});
                             }
                             i++;
                         }
@@ -97,10 +95,15 @@ class SanicFeatures extends React.Component {
                     onBuild={(doPush) => {
                         if(doPush) {
                             this.currentEnvironmentDiagram().setPushedImages(this.images);
+                            this.pushedImages = this.images;
                         } else {
                             this.currentEnvironmentDiagram().setLocalImages(this.images);
                         }
                         return this.images;
+                    }}
+                    onDeploy={() => {
+                        this.currentEnvironmentDiagram().setDeployedImages(this.pushedImages);
+                        return this.pushedImages;
                     }}
                 />
                 <SwipableCarousel

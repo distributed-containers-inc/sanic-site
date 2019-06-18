@@ -16,7 +16,7 @@ class InfrastructureDiagram extends React.Component {
             registryImages: [],
             localImages: [],
         };
-        this.state.graphData=this.generateGraphData();
+        this.state.graphData = this.generateGraphData();
     }
 
     generateGraphData(args) {
@@ -45,7 +45,8 @@ class InfrastructureDiagram extends React.Component {
             }
         }
 
-        let registryImages = args.registryImages || this.state.registryImages || [];
+        let registryImages = args.registryImages || this.state.registryImages
+                             || [];
         for (let i = 0; i < registryImages.length; i++) {
             let id = 'registry-image-' + i;
             let img = registryImages[i];
@@ -77,6 +78,25 @@ class InfrastructureDiagram extends React.Component {
                            target: DEVELOPER_PC_ID,
                            color: palette.primary.text.dark
                        });
+        }
+
+        let deployedImages = args.deployedImages || this.state.deployedImages
+                             || [];
+        for (let i = 0; i < deployedImages.length; i++) {
+            let id = 'pod-' + i;
+            let img = deployedImages[i];
+            let machineId = 'machine-' + (i % this.props.machines.length);
+            nodes.push({
+                           id: id,
+                           name: 'Pod running "' + img + '"',
+                           val: 4,
+                           color: '#cc7744'
+                       });
+            links.push({
+                           source: id,
+                           target: machineId,
+                           color: palette.primary.text.dark
+                       })
         }
 
         nodes[0].position = 'bottom-center';
@@ -117,6 +137,14 @@ class InfrastructureDiagram extends React.Component {
                 registryImages: images,
                 graphData: this.generateGraphData({registryImages: images})
             });
+    }
+
+    setDeployedImages(images) {
+        this.setState(
+            {
+                deployedImages: images,
+                graphData: this.generateGraphData({deployedImages: images})
+            })
     }
 
     updateDimensions() {

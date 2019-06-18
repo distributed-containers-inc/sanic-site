@@ -49,7 +49,7 @@ export default class IndexTerminal extends React.Component {
         return {
             outputs: [OutputFactory.makeTextOutput(
                 "Built "
-                + "" + builtServices.join(", ")
+                + builtServices.join(", ")
                 + (push ? ", pushed them and to the registry"
                         : ", and stored them to the local docker daemon. Try sanic build --push as well.")
             )]
@@ -57,7 +57,23 @@ export default class IndexTerminal extends React.Component {
     }
 
     sanicDeployCommand(state, opts) {
-        return this.sanicHelp(); //TODO
+        if(opts.length !== 0) {
+            return {
+                outputs: [OutputFactory.makeTextOutput("Usage: sanic deploy")]
+            }
+        }
+        let deployedImages = this.props.onDeploy();
+        if(deployedImages.length === 0) {
+            return {
+                outputs: [OutputFactory.makeTextOutput("You need to build and push images before you can deploy them. Try 'sanic build --push'")]
+            }
+        }
+        return {
+            outputs: [OutputFactory.makeTextOutput(
+                "Deployed pods running the following images: "
+                + deployedImages.join(", ")
+            )]
+        }
     }
 
     sanicEnvCommand(state, opts) {
@@ -134,6 +150,7 @@ export default class IndexTerminal extends React.Component {
                 <ReactTerminal
                     autoFocus={false}
                     clickToFocus={true}
+                    promptSymbol={'[' + this.props.env + '] demo$'}
                     theme={{
                         background: palette.primary.background.dark,
                         promptSymbolColor: palette.primary.text.main,
@@ -146,7 +163,6 @@ export default class IndexTerminal extends React.Component {
                         width: '98%',
                         height: '9.6em',
                     }}
-                    inputStr='sanic env prod'
                     emulatorState={this.generateState()}
                 />
             </div>
