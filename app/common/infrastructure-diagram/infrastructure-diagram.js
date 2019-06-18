@@ -152,6 +152,8 @@ class InfrastructureDiagram extends React.Component {
                           width: this.containerRef.current.offsetWidth,
                           height: this.containerRef.current.offsetHeight,
                       })
+        this.graphRef.current.zoom(2.5);
+        this.graphRef.current.centerAt(0, 0);
     }
 
     forceCenterPositioned() {
@@ -169,7 +171,7 @@ class InfrastructureDiagram extends React.Component {
                     y: 0
                 },
                 "center-left": {
-                    x: -0.15 * diagram.state.width,
+                    x: -0.12 * diagram.state.width,
                     y: 0
                 },
                 "bottom-center": {
@@ -225,18 +227,16 @@ class InfrastructureDiagram extends React.Component {
 
     componentDidMount() {
         this.updateDimensions();
-        window.addEventListener("resize", () => {
-            this.updateDimensions()
-        });
+
+        this.updateDimensionsListener = this.updateDimensions.bind(this);
+        window.addEventListener("resize", this.updateDimensionsListener);
+
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
         this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
-        this.graphRef.current.zoom(2.5);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", () => {
-            this.updateDimensions()
-        });
+        window.removeEventListener("resize", this.updateDimensionsListener);
     }
 
     render() {
