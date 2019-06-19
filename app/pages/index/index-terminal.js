@@ -170,7 +170,7 @@ export default class IndexTerminal extends React.Component {
                 <NoScrollTerminal
                     autoFocus={false}
                     clickToFocus={true}
-                    promptSymbol={'[' + this.props.env + '] demo$'}
+                    promptSymbol={'[' + this.props.env + '] demo$ '}
                     ref={this.terminalRef}
                     theme={{
                         background: palette.primary.background.dark,

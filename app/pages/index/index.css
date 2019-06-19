@@ -23,7 +23,11 @@
     width: 100%;
 }
 
-/*TODO: HACK*/
+/*TODO: HACKS*/
 .react-swipeable-view-container > div {
     overflow: hidden !important;
+}
+
+.terminalContainer span {
+    white-space: pre !important;
 }
