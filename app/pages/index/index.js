@@ -75,6 +75,10 @@ class SanicFeatures extends React.Component {
         return this.currentEnvironment().diagramRef.current;
     }
 
+    tutorialText() {
+        return "Environment: " + this.environments[this.state.currentEnv].name
+    }
+
     render() {
         return (
             <div
@@ -100,15 +104,20 @@ class SanicFeatures extends React.Component {
                     onBuild={(doPush) => {
                         if(doPush) {
                             this.currentEnvironmentDiagram().setPushedImages(this.images);
-                            this.pushedImages = this.images;
+                            this.currentEnvironment().pushedImages = this.images;
                         } else {
-                            this.currentEnvironmentDiagram().setLocalImages(this.images);
+                            //local push updates all of the diagrams
+                            for(let env of this.environments) {
+                                env.diagramRef.current.setLocalImages(this.images);
+                            }
                         }
                         return this.images;
                     }}
                     onDeploy={() => {
-                        this.currentEnvironmentDiagram().setDeployedImages(this.pushedImages);
-                        return this.pushedImages;
+                        this.currentEnvironmentDiagram().setDeployedImages(
+                            this.currentEnvironment().pushedImages
+                        );
+                        return this.currentEnvironment().pushedImages || [];
                     }}
                 />
                 <SwipableCarousel
@@ -117,7 +126,7 @@ class SanicFeatures extends React.Component {
                 >
                     {this.environments.map(env => (
                         <InfrastructureDiagram
-                            title={"Environment: " + env.name}
+                            title={this.tutorialText()}
                             machines={env.machines}
                             key={env.name}
                             ref={env.diagramRef}
