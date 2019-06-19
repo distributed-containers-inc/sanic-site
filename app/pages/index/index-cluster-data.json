@@ -1,0 +1,47 @@
+{
+  "environments": [
+    {
+      "name": "dev",
+      "machines": [
+        {
+          "name": "Kubelet-in-Docker #1"
+        },
+        {
+          "name": "Kubelet-in-Docker #2"
+        },
+        {
+          "name": "Kubelet-in-Docker #3"
+        }
+      ]
+    },
+    {
+      "name": "staging",
+      "machines": [
+        {
+          "name": "Staging server"
+        }
+      ]
+    },
+    {
+      "name": "prod",
+      "machines": [
+        {
+          "name": "Production server #1"
+        },
+        {
+          "name": "Production server #2"
+        },
+        {
+          "name": "Production server #3"
+        },
+        {
+          "name": "Production server #4"
+        },
+        {
+          "name": "Production server #5"
+        }
+      ]
+    }
+  ],
+  "images": ["web", "api", "redis"]
+}

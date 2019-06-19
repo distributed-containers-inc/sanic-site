@@ -139,6 +139,10 @@ class InfrastructureDiagram extends React.Component {
             });
     }
 
+    getPushedImages() {
+        return this.state.registryImages;
+    }
+
     setDeployedImages(images) {
         this.setState(
             {
@@ -256,18 +260,25 @@ class InfrastructureDiagram extends React.Component {
         return (
             <div style={{
                 width: '100%',
-                height: '30em',
+                height: '25em',
                 backgroundColor: palette.primary.background.main,
                 content: 'border-box',
                 paddingTop: '1em',
-                paddingBottom: '4.5em',
+                paddingBottom: '10em',
             }}>
                 {this.props.title ? (
                     <h2 style={{
                         textAlign: 'center',
                         width: '100%',
-                        margin: '0'
+                        margin: '0',
                     }}>{this.props.title}</h2>
+                ) : null}
+                {this.props.subtext ? (
+                    <p style={{
+                        textAlign: 'center',
+                        width: '100%',
+                        marginTop: '1em',
+                    }}>{this.props.subtext}</p>
                 ) : null}
                 <div ref={this.containerRef}
                      style={{width: '100%', height: '100%'}}>

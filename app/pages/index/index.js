@@ -3,80 +3,31 @@ import ReactDOM from 'react-dom';
 import IndexTerminal from './index-terminal';
 import {InfrastructureDiagram} from '../../common/infrastructure-diagram';
 import SwipableCarousel from '../../common/carousel';
+import {TUTORIAL_STEPS, INITIAL_STEP} from './tutorial-steps';
+import IndexClusterData from './index-cluster-data'
 
 class SanicFeatures extends React.Component {
-    environments = [
-        {
-            'name': 'dev',
-            'machines': [
-                {
-                    "name": "Kubelet-in-Docker #1",
-                },
-                {
-                    "name": "Kubelet-in-Docker #2"
-                },
-                {
-                    "name": "Kubelet-in-Docker #3"
-                }
-            ]
-        },
-        {
-            'name': 'staging',
-            'machines': [
-                {
-                    "name": "Staging server"
-                }
-            ]
-        },
-        {
-            'name': 'prod',
-            'machines': [
-                {
-                    "name": "Production server #1"
-                },
-                {
-                    "name": "Production server #2"
-                },
-                {
-                    "name": "Production server #3"
-                },
-                {
-                    "name": "Production server #4"
-                },
-                {
-                    "name": "Production server #5"
-                },
-            ],
-        },
-    ];
-
-    images = ["web", "api", "redis"];
-    pushedImages = [];
-
     constructor(props) {
         super(props);
 
         this.terminalRef = React.createRef();
         this.carouselRef = React.createRef();
-        for(let environment of this.environments) {
-            environment.diagramRef = React.createRef();
+        this.environmentRefs = {};
+        for(let environment of IndexClusterData.environments) {
+            this.environmentRefs[environment.name] = React.createRef();
         }
 
         this.state = {
             currentEnv: 0
-        }
+        };
     }
 
     currentEnvironment() {
-        return this.environments[this.state.currentEnv];
+        return IndexClusterData.environments[this.state.currentEnv];
     }
 
     currentEnvironmentDiagram() {
-        return this.currentEnvironment().diagramRef.current;
-    }
-
-    tutorialText() {
-        return "Environment: " + this.environments[this.state.currentEnv].name
+        return this.environmentRefs[this.currentEnvironment().name].current;
     }
 
     render() {
@@ -90,10 +41,10 @@ class SanicFeatures extends React.Component {
                 <IndexTerminal
                     ref={this.terminalRef}
                     env={this.currentEnvironment().name}
-                    validEnvs={this.environments.map(e => e.name)}
+                    validEnvs={IndexClusterData.environments.map(e => e.name)}
                     onEnv={(envName) => {
                         let i = 0;
-                        for (let env of this.environments) {
+                        for (let env of IndexClusterData.environments) {
                             if (env.name === envName) {
                                 this.carouselRef.current.setState({step: i});
                                 this.setState({currentEnv: i});
@@ -103,33 +54,41 @@ class SanicFeatures extends React.Component {
                     }}
                     onBuild={(doPush) => {
                         if(doPush) {
-                            this.currentEnvironmentDiagram().setPushedImages(this.images);
-                            this.currentEnvironment().pushedImages = this.images;
+                            this.currentEnvironmentDiagram().setPushedImages(IndexClusterData.images);
                         } else {
                             //local push updates all of the diagrams
-                            for(let env of this.environments) {
-                                env.diagramRef.current.setLocalImages(this.images);
+                            for(let envName in this.environmentRefs) {
+                                this.environmentRefs[envName].current.setLocalImages(IndexClusterData.images);
                             }
                         }
-                        return this.images;
+                        return IndexClusterData.images;
                     }}
                     onDeploy={() => {
                         this.currentEnvironmentDiagram().setDeployedImages(
-                            this.currentEnvironment().pushedImages
+                            this.currentEnvironmentDiagram().getPushedImages()
                         );
-                        return this.currentEnvironment().pushedImages || [];
+                        return this.currentEnvironmentDiagram().getPushedImages() || [];
                     }}
+                    plugins={[{
+                        onExecuteStarted: (state, cmd) => {
+
+                        },
+                        onExecuteCompleted: (state, cmd) => {
+
+                        }
+                    }]}
                 />
                 <SwipableCarousel
                     ref={this.carouselRef}
                     onChangeIndex={(step) => this.setState({currentEnv: step})}
                 >
-                    {this.environments.map(env => (
+                    {IndexClusterData.environments.map(env => (
                         <InfrastructureDiagram
-                            title={this.tutorialText()}
+                            title={"Current environment: " + this.currentEnvironment().name}
+                            subtext={'test'}
                             machines={env.machines}
                             key={env.name}
-                            ref={env.diagramRef}
+                            ref={this.environmentRefs[env.name]}
                         />
                     ))}
                 </SwipableCarousel>

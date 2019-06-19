@@ -142,6 +142,18 @@ export default class IndexTerminal extends React.Component {
                 '/sanic-example/sanic.yaml': {
                     content: sanicYaml
                 },
+                '/sanic-example/web': {},
+                '/sanic-example/web/Dockerfile': {
+                    content: 'FROM ubuntu:18.04\n# (... the rest of the dockerfile)'
+                },
+                '/sanic-example/redis': {},
+                '/sanic-example/redis/Dockerfile': {
+                    content: 'FROM redis\n# (... the rest of the dockerfile)'
+                },
+                '/sanic-example/api': {},
+                '/sanic-example/api/Dockerfile': {
+                    content: 'FROM ubuntu:18.04\n# (... the rest of the dockerfile)'
+                },
             });
 
         let commandMapping = CommandMapping.create(
@@ -158,6 +170,12 @@ export default class IndexTerminal extends React.Component {
                 'fs': fs,
                 'commandMapping': commandMapping
             })
+    }
+
+    componentDidMount() {
+        for(let plugin of this.props.plugins || []) {
+            this.terminalRef.current.plugins.push(plugin);
+        }
     }
 
     render() {
