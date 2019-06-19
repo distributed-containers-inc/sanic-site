@@ -11,17 +11,17 @@ class SwipeableTextMobileStepper extends React.Component {
     }
 
     handleNext() {
-        this.setState(prevState => ({step: prevState.step+1}));
+        this.handleStepChange(this.state.step+1);
     }
 
     handleBack() {
-        this.setState(prevState => ({step: prevState.step-1}));
+        this.handleStepChange(this.state.step-1);
     }
 
     handleStepChange(step) {
         this.setState({step: step});
         if(this.props.onChangeIndex) {
-            this.props.onChangeIndex.call(arguments);
+            this.props.onChangeIndex(step);
         }
     }
 
@@ -40,7 +40,7 @@ class SwipeableTextMobileStepper extends React.Component {
                 <SwipeableViews
                     axis='x'
                     index={this.state.step}
-                    onChangeIndex={() => this.handleStepChange}
+                    onChangeIndex={this.handleStepChange.bind(this)}
                     enableMouseEvents
                     style={{width: '100%'}}
                     animateHeight={true}
@@ -48,7 +48,7 @@ class SwipeableTextMobileStepper extends React.Component {
                     {this.props.children}
                 </SwipeableViews>
                 <button onClick={() => this.handleNext()}
-                        disabled={this.state.step === this.props.children.length}
+                        disabled={this.state.step === this.props.children.length-1}
                         style={{
                             backgroundColor: palette.primary.background.main,
                             color: palette.primary.text.main,

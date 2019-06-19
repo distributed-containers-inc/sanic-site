@@ -113,6 +113,7 @@ class SanicFeatures extends React.Component {
                 />
                 <SwipableCarousel
                     ref={this.carouselRef}
+                    onChangeIndex={(step) => this.setState({currentEnv: step})}
                 >
                     {this.environments.map(env => (
                         <InfrastructureDiagram
