@@ -3,8 +3,8 @@ const glob = require("glob");
 
 let entries = () => {
     let ret = {};
-    for (let pagePath of glob.sync('./app/pages/**/*.js')) {
-        ret[path.basename(pagePath, '.js')] = pagePath;
+    for (let pagePath of glob.sync('./app/pages/*')) {
+        ret[path.basename(pagePath)] = pagePath+"/"+path.basename(pagePath)+'.js';
     }
     return ret;
 };
