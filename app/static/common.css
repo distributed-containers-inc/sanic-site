@@ -7,6 +7,25 @@ html,body {
     color: #acc1cf;
 }
 
+a:link {
+    color: #8a95ff;
+}
+
+/* visited link */
+a:visited {
+    color: #8a95ff;
+}
+
+/* mouse over link */
+a:hover {
+    color: #acc1cf;
+}
+
+/* selected link */
+a:active {
+    color: #acc1cf;
+}
+
 body {
     display: flex;
     flex-direction: column;
