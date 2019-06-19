@@ -166,6 +166,7 @@ export default class IndexTerminal extends React.Component {
                 backgroundColor: palette.primary.background.dark,
                 paddingTop: '0.3em',
                 paddingBottom: '0.3em',
+                cursor: 'text',
             }}>
                 <NoScrollTerminal
                     autoFocus={false}
