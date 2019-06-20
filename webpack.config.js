@@ -1,10 +1,14 @@
 const path = require('path');
-const glob = require("glob");
+const glob = require('glob');
+const fs = require('fs');
 
 let entries = () => {
     let ret = {};
     for (let pagePath of glob.sync('./app/pages/*')) {
-        ret[path.basename(pagePath)] = pagePath+"/"+path.basename(pagePath)+'.js';
+        const jsFile = pagePath+"/"+path.basename(pagePath)+'.js';
+        if(fs.existsSync(jsFile)) {
+            ret[path.basename(pagePath)] = jsFile;
+        }
     }
     return ret;
 };

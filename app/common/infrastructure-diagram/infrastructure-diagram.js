@@ -155,7 +155,7 @@ class InfrastructureDiagram extends React.Component {
         this.setState({
                           width: this.containerRef.current.offsetWidth,
                           height: this.containerRef.current.offsetHeight,
-                      })
+                      });
         this.graphRef.current.zoom(2.5);
         this.graphRef.current.centerAt(0, 0);
     }
@@ -180,7 +180,7 @@ class InfrastructureDiagram extends React.Component {
                 },
                 "bottom-center": {
                     x: 0,
-                    y: 0.12 * diagram.state.height
+                    y: 0.10 * diagram.state.height
                 },
             }
         };

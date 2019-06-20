@@ -28,11 +28,11 @@
 </head>
 <body>
 <nav class="header-nav">
-    <a href="demo">Demo</a>
-    <a href="about">About</a>
+    <a href="/">Demo</a>
+    <a href="download">Download</a>
     <a href="." class="title">Sanic</a>
-    <a href="docs">Docs</a>
     <a href="https://github.com/distributed-containers-inc/sanic">Source</a>
+    <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example">Examples</a>
 </nav>
 <div class="main-content">
 {{template "content" .}}
@@ -42,7 +42,7 @@
     © Distributed Containers Inc. 2019
 </footer>
 {{range $bundle := PageBundles}}
-<script type="text/javascript" src="/static/bundles/{{$bundle}}"></script>
+<script type="text/javascript" src="/static/bundles/{{$bundle}}" async></script>
 {{end}}
 </html>
 

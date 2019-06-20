@@ -91,7 +91,7 @@ func main() {
 		if strings.Contains(pageName, ".") {
 			pageName = pageName[:strings.Index(pageName, ".")]
 		}
-		router.GET("/"+pageName+".html", func(c *gin.Context) {
+		router.GET("/"+pageName, func(c *gin.Context) {
 			c.HTML(http.StatusOK, pageName+".html", nil)
 		})
 		router.StaticFile("/"+pageName+".css", pageDir+"/"+pageName+".css")
