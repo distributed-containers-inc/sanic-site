@@ -18,12 +18,13 @@ class SanicFeatures extends React.Component {
         }
 
         this.state = {
-            currentEnv: 0
+            currEnv: 0,
+            currTutorialStep: INITIAL_STEP,
         };
     }
 
     currentEnvironment() {
-        return IndexClusterData.environments[this.state.currentEnv];
+        return IndexClusterData.environments[this.state.currEnv];
     }
 
     currentEnvironmentDiagram() {
@@ -47,7 +48,7 @@ class SanicFeatures extends React.Component {
                         for (let env of IndexClusterData.environments) {
                             if (env.name === envName) {
                                 this.carouselRef.current.setState({step: i});
-                                this.setState({currentEnv: i});
+                                this.setState({currEnv: i});
                             }
                             i++;
                         }
@@ -71,21 +72,27 @@ class SanicFeatures extends React.Component {
                     }}
                     plugins={[{
                         onExecuteStarted: (state, cmd) => {
-
+                            let step = TUTORIAL_STEPS[this.state.currTutorialStep];
+                            if(step.started && step.started(state, cmd)) {
+                                this.setState({currTutorialStep: step.started(state, cmd)});
+                            }
                         },
-                        onExecuteCompleted: (state, cmd) => {
-
+                        onExecuteCompleted: (state) => {
+                            let step = TUTORIAL_STEPS[this.state.currTutorialStep];
+                            if(step.completed && step.completed(state)) {
+                                this.setState({currTutorialStep: step.completed(state)});
+                            }
                         }
                     }]}
                 />
                 <SwipableCarousel
                     ref={this.carouselRef}
-                    onChangeIndex={(step) => this.setState({currentEnv: step})}
+                    onChangeIndex={(step) => this.setState({currEnv: step})}
                 >
                     {IndexClusterData.environments.map(env => (
                         <InfrastructureDiagram
                             title={"Current environment: " + this.currentEnvironment().name}
-                            subtext={'test'}
+                            subtext={TUTORIAL_STEPS[this.state.currTutorialStep].text}
                             machines={env.machines}
                             key={env.name}
                             ref={this.environmentRefs[env.name]}

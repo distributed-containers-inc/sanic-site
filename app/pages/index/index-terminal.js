@@ -6,7 +6,8 @@ import {
     defaultCommandMapping,
     EmulatorState,
     FileSystem,
-    OutputFactory
+    OutputFactory,
+    EnvironmentVariables,
 } from "javascript-terminal";
 
 const helpMessage = `
@@ -165,10 +166,13 @@ export default class IndexTerminal extends React.Component {
                 }
             });
 
+        let env = EnvironmentVariables.create({'cwd': '/sanic-example'})
+
         return EmulatorState.create(
             {
                 'fs': fs,
-                'commandMapping': commandMapping
+                'commandMapping': commandMapping,
+                'environmentVariables': env,
             })
     }
 
