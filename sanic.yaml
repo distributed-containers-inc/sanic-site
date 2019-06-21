@@ -14,4 +14,12 @@ environments:
       - name: setup_untaint
         command: sanic kubectl taint nodes --all node-role.kubernetes.io/master-
       - name: setup_ingress
-        command: sanic kubectl apply -f hack/bare-metal-nginx-ingress.yaml --prune --all
+        command: |
+          sanic kubectl apply -f hack/bare-metal-nginx-ingress.yaml
+          sanic kubectl create --save-config namespace cert-manager
+          sanic kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
+          sanic kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.8.1/cert-manager.yaml
+      - name: setup_letsencrypt
+        command: sanic kubectl apply -f hack/lets-encrypt-issuer.yaml
+      - name: setup
+        command: sanic run setup_untaint && sanic run setup_ingress

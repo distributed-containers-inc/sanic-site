@@ -54,7 +54,17 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: sanic-site
+  {{if eq (getenv "SANIC_ENV") "prod"}}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/issuer: "letsencrypt-prod"
+    certmanager.k8s.io/acme-challenge-type: http01
+  {{end}}
 spec:
+  tls:
+  - hosts:
+    - sanic.io
+    secretName: sanic-prod-tlscert
   rules:
   - host: sanic.io
     http:
