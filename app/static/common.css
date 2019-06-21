@@ -7,6 +7,14 @@ html,body {
     color: #acc1cf;
 }
 
+.color-dark {
+    background-color: #151519;
+}
+
+.color-main {
+    background-color: #26282d;
+}
+
 a:link {
     color: #8a95ff;
 }
