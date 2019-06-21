@@ -1,18 +1,24 @@
-FROM golang:1.12-stretch
+FROM golang:1.12.5 AS gobuild
 
 LABEL maintainer="Colin Chartier <me@colinchartier.com>"
 
-RUN apt-get update && \
-    apt-get -y install inotify-tools npm && \
-    rm -rf /var/lib/apt/lists/*
+RUN echo hello
+WORKDIR /src
+COPY app/main.go .
+RUN go get -d ./...
+RUN go build -o sanicsite
 
-WORKDIR /go/src/app
-RUN go get github.com/gin-gonic/gin
-RUN go get github.com/gin-contrib/multitemplate
+FROM node:8.16.0-jessie AS nodebuild
 
-COPY package.json package-lock.json .babelrc webpack.config.js .
+WORKDIR /src
+COPY package.json package-lock.json .babelrc webpack.config.js ./
 RUN npm install
-COPY app .
-COPY entrypoint.sh /
+COPY app ./app
+RUN ./node_modules/.bin/webpack
 
-ENTRYPOINT ["/entrypoint.sh"]
+FROM debian:jessie
+COPY --from=nodebuild /src/app /app
+COPY --from=gobuild /src/sanicsite /app/sanicsite
+WORKDIR /app
+
+ENTRYPOINT ["/app/sanicsite"]

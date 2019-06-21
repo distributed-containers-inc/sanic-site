@@ -4,3 +4,9 @@ environments:
     commands:
       - name: webpack
         command: "./node_modules/.bin/webpack $@"
+  prod:
+    clusterProvisioner: external
+    clusterProvisionerArgs:
+      registry: sanic.io
+      edgeNodes: sanic.io
+      kubeConfig: ~/.kube/sanic.io.config
