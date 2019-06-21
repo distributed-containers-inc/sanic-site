@@ -7,6 +7,11 @@ environments:
   prod:
     clusterProvisioner: external
     clusterProvisionerArgs:
-      registry: sanic.io
+      registry: distributedcontainers
       edgeNodes: sanic.io
       kubeConfig: ~/.kube/sanic.io.config
+    commands:
+      - name: setup_untaint
+        command: sanic kubectl taint nodes --all node-role.kubernetes.io/master-
+      - name: setup_ingress
+        command: sanic kubectl apply -f hack/bare-metal-nginx-ingress.yaml --prune --all
