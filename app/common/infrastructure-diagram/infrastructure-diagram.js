@@ -53,7 +53,7 @@ class InfrastructureDiagram extends React.Component {
             nodes.push({
                            id: id,
                            name: 'Image ' + img + ":latest",
-                           val: 2,
+                           val: 3,
                            color: '#5cb9cc'
                        });
             links.push({
@@ -70,7 +70,7 @@ class InfrastructureDiagram extends React.Component {
             nodes.push({
                            id: id,
                            name: 'Image ' + img + ":latest",
-                           val: 2,
+                           val: 3,
                            color: '#5cb9cc'
                        });
             links.push({
@@ -89,7 +89,7 @@ class InfrastructureDiagram extends React.Component {
             nodes.push({
                            id: id,
                            name: 'Pod running "' + img + '"',
-                           val: 4,
+                           val: 3,
                            color: '#cc7744'
                        });
             links.push({
@@ -106,14 +106,14 @@ class InfrastructureDiagram extends React.Component {
                     id: DEVELOPER_PC_ID,
                     name: "Developer PC",
                     position: 'top-center',
-                    val: 8,
+                    val: 5,
                     color: '#49c9cc'
                 },
                 {
                     id: REGISTRY_ID,
                     name: "Registry",
                     position: "center-left",
-                    val: 15,
+                    val: 7,
                     color: "#cc7078",
                 },
                 ...nodes
@@ -210,14 +210,14 @@ class InfrastructureDiagram extends React.Component {
 
         function force(alpha) {
             for (let node of nodes) {
-                if (node.x < -.18 * diagram.state.width) {
+                if (node.x-node.val < -.16 * diagram.state.width) {
                     node.vx += 10 * alpha;
-                } else if (node.x > .18 * diagram.state.width) {
+                } else if (node.x+node.val > .16 * diagram.state.width) {
                     node.vx -= 10 * alpha;
                 }
-                if (node.y < -.18 * diagram.state.height) {
+                if (node.y-node.val < -.16 * diagram.state.height) {
                     node.vy += 10 * alpha;
-                } else if (node.y > .18 * diagram.state.height) {
+                } else if (node.y+node.val > .16 * diagram.state.height) {
                     node.vy -= 10 * alpha;
                 }
             }
@@ -266,19 +266,19 @@ class InfrastructureDiagram extends React.Component {
                     ctx.font = `${fontSize}px Montserrat, sans-serif`;
 
                     const textWidth = ctx.measureText(node.name).width;
-                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.25);
 
                     ctx.fillStyle = 'rgba(30, 30, 30, 0.8)';
                     ctx.fillRect(
                         node.x - bckgDimensions[0] / 2,
-                        node.y - (bckgDimensions[1] / 2) + node.val*globalScale + fontSize,
+                        node.y - (bckgDimensions[1] / 2),
                         ...bckgDimensions
                     );
 
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                     ctx.textAlign = "center";
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(node.name, node.x, node.y + node.val*globalScale + fontSize);
+                    ctx.fillText(node.name, node.x, node.y);
                 }}
             />
         );
