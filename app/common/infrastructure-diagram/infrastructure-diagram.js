@@ -13,143 +13,174 @@ class InfrastructureDiagram extends React.Component {
         this.state = {
             width: window.outerWidth,
             height: window.outerHeight,
-            registryImages: [],
-            localImages: [],
+            graphData: {
+                nodes: [],
+                links: [],
+            }
         };
-        this.state.graphData = this.generateGraphData();
     }
 
-    generateGraphData(args) {
-        args = args || {};
-        let nodes = [];
-        let links = [];
+    setupInitialGraph() {
+        this.setState(() => {
+            const newNodes = [];
+            const newLinks = [];
+            for (let machine of this.props.machines) {
+                newNodes.push({
+                                  id: 'machine-' + machine.name,
+                                  machineId: machine.name,
+                                  name: machine.name,
+                                  val: 4,
+                                  color: 'rgba(204, 201, 112, 0.7)'
+                              });
+            }
+            newNodes[0].position = 'bottom-center';
 
-        for (let i = 0; i < this.props.machines.length; i++) {
-            this.props.machines[i].id = i;
-        }
-        for (let machine of this.props.machines) {
-            nodes.push({
-                           id: 'machine-' + machine.id,
-                           name: machine.name,
-                           val: 4,
-                           color: 'rgba(204, 201, 112, 0.7)'
-                       });
-            for (let otherMachine of this.props.machines) {
-                if (otherMachine !== machine) {
-                    links.push({
-                                   source: 'machine-' + machine.id,
-                                   target: 'machine-' + otherMachine.id,
-                                   color: palette.primary.text.dark
-                               })
+            for (let nodeA of newNodes) {
+                for (let nodeB of newNodes) {
+                    if (nodeA !== nodeB) {
+                        newLinks.push({
+                                          source: nodeA.id,
+                                          target: nodeB.id,
+                                          color: palette.primary.text.dark
+                                      })
+                    }
                 }
             }
-        }
 
-        let registryImages = args.registryImages || this.state.registryImages
-                             || [];
-        for (let i = 0; i < registryImages.length; i++) {
-            let id = 'registry-image-' + i;
-            let img = registryImages[i];
-            nodes.push({
-                           id: id,
-                           name: 'Image ' + img + ":latest",
-                           val: 3,
-                           color: '#5cb9cc'
-                       });
-            links.push({
-                           source: id,
-                           target: REGISTRY_ID,
-                           color: palette.primary.text.dark
-                       });
-        }
-
-        let localImages = args.localImages || this.state.localImages || [];
-        for (let i = 0; i < localImages.length; i++) {
-            let id = 'local-image-' + i;
-            let img = localImages[i];
-            nodes.push({
-                           id: id,
-                           name: 'Image ' + img + ":latest",
-                           val: 3,
-                           color: '#5cb9cc'
-                       });
-            links.push({
-                           source: id,
-                           target: DEVELOPER_PC_ID,
-                           color: palette.primary.text.dark
-                       });
-        }
-
-        let deployedImages = args.deployedImages || this.state.deployedImages
-                             || [];
-        for (let i = 0; i < deployedImages.length; i++) {
-            let id = 'pod-' + i;
-            let img = deployedImages[i];
-            let machineId = 'machine-' + (i % this.props.machines.length);
-            nodes.push({
-                           id: id,
-                           name: 'Pod running "' + img + '"',
-                           val: 3,
-                           color: '#cc7744'
-                       });
-            links.push({
-                           source: id,
-                           target: machineId,
-                           color: palette.primary.text.dark
-                       })
-        }
-
-        nodes[0].position = 'bottom-center';
-        return {
-            nodes: [
-                {
-                    id: DEVELOPER_PC_ID,
-                    name: "Developer PC",
-                    position: 'top-center',
-                    val: 5,
-                    color: '#49c9cc'
-                },
-                {
-                    id: REGISTRY_ID,
-                    name: "Registry",
-                    position: "center-left",
-                    val: 7,
-                    color: "#cc7078",
-                },
-                ...nodes
-            ],
-            links: [
-                ...links
-            ]
-        }
+            return {
+                graphData: {
+                    nodes: [
+                        {
+                            id: DEVELOPER_PC_ID,
+                            name: "Developer PC",
+                            position: 'top-center',
+                            val: 5,
+                            color: '#49c9cc'
+                        },
+                        {
+                            id: REGISTRY_ID,
+                            name: "Registry",
+                            position: "center-left",
+                            val: 7,
+                            color: "#cc7078",
+                        },
+                        ...newNodes
+                    ],
+                    links: newLinks,
+                }
+            }
+        })
     }
 
     setLocalImages(images) {
-        this.setState(
-            {
-                localImages: images,
-                graphData: this.generateGraphData({localImages: images})
-            });
+        this.setState(({ graphData: { nodes, links } }) => {
+            const newNodes = [];
+            const newLinks = links.filter(link => !/local-image-.*/.test(link.source));
+            for(let node of nodes) {
+                if(!node.localImage || images.indexOf(node.localImage) !== -1) {
+                    newNodes.push(node);
+                }
+            }
+            const currImageIds = nodes.filter(n => !!n.localImage).map(n => n.localImage);
+            for(let image of images) {
+                if(currImageIds.indexOf(image) === -1) {
+                    newNodes.push({
+                        id: 'local-image-'+image,
+                        localImage: image,
+                        name: 'Image ' + image + ':latest',
+                        val: 3,
+                        color: '#5cb9cc',
+                    });
+                    newLinks.push({
+                        source: 'local-image-'+image,
+                        target: DEVELOPER_PC_ID,
+                        color: palette.primary.text.dark,
+                    });
+                }
+            }
+            return {
+                graphData: {
+                    nodes: newNodes,
+                    links: newLinks,
+                }
+            }
+        });
     }
 
     setPushedImages(images) {
-        this.setState(
-            {
-                registryImages: images,
-                graphData: this.generateGraphData({registryImages: images})
-            });
+        this.setState(({ graphData: { nodes, links } }) => {
+            const newNodes = [];
+            const newLinks = links.filter(link => !/pushed-image-.*/.test(link.source));
+            for(let node of nodes) {
+                if(!node.pushedImage || images.indexOf(node.pushedImage) !== -1) {
+                    newNodes.push(node);
+                }
+            }
+            const currImageIds = nodes.filter(n => !!n.pushedImage).map(n => n.pushedImage);
+            for(let image of images) {
+                if(currImageIds.indexOf(image) === -1) {
+                    newNodes.push({
+                                      id: 'pushed-image-'+image,
+                                      pushedImage: image,
+                                      name: 'Image ' + image + ':latest',
+                                      val: 3,
+                                      color: '#5cb9cc',
+                                  });
+                    newLinks.push({
+                                      source: 'pushed-image-'+image,
+                                      target: REGISTRY_ID,
+                                      color: palette.primary.text.dark,
+                                  });
+                }
+            }
+            return {
+                graphData: {
+                    nodes: newNodes,
+                    links: newLinks,
+                }
+            }
+        });
     }
 
     getPushedImages() {
-        return this.state.registryImages;
+        return this.state.graphData.nodes.filter(n => !!n.pushedImage).map(n => n.pushedImage)
     }
 
     setDeployedImages(images) {
-        this.setState(
-            {
-                deployedImages: images,
-                graphData: this.generateGraphData({deployedImages: images})
-            })
+        this.setState(({ graphData: { nodes, links } }) => {
+            const newNodes = [];
+            const newLinks = links.filter(link => !/deployed-image-.*/.test(link.source));
+            for(let node of nodes) {
+                if(!node.deployedImage || images.indexOf(node.deployedImage) !== -1) {
+                    newNodes.push(node);
+                }
+            }
+            const currImageIds = nodes.filter(n => !!n.deployedImage).map(n => n.deployedImage);
+            for(let i = 0; i < images.length; i++) {
+                let image = images[i];
+                let machineId = 'machine-'+this.props.machines[i % this.props.machines.length].name;
+                if(currImageIds.indexOf(image) === -1) {
+                    newNodes.push({
+                                      id: 'deployed-image-'+image,
+                                      deployedImage: image,
+                                      name: 'Pod running ' + image + ':latest',
+                                      val: 3,
+                                      color: '#cc7744',
+                                  });
+                    newLinks.push({
+                                      source: 'deployed-image-'+image,
+                                      target: machineId,
+                                      color: palette.primary.text.dark,
+                                  });
+                }
+            }
+            return {
+                graphData: {
+                    nodes: newNodes,
+                    links: newLinks,
+                }
+            }
+        });
     }
 
     updateDimensions() {
@@ -210,14 +241,14 @@ class InfrastructureDiagram extends React.Component {
 
         function force(alpha) {
             for (let node of nodes) {
-                if (node.x-node.val < -.16 * diagram.state.width) {
+                if (node.x - node.val < -.16 * diagram.state.width) {
                     node.vx += 10 * alpha;
-                } else if (node.x+node.val > .16 * diagram.state.width) {
+                } else if (node.x + node.val > .16 * diagram.state.width) {
                     node.vx -= 10 * alpha;
                 }
-                if (node.y-node.val < -.16 * diagram.state.height) {
+                if (node.y - node.val < -.16 * diagram.state.height) {
                     node.vy += 10 * alpha;
-                } else if (node.y+node.val > .16 * diagram.state.height) {
+                } else if (node.y + node.val > .16 * diagram.state.height) {
                     node.vy -= 10 * alpha;
                 }
             }
@@ -238,6 +269,8 @@ class InfrastructureDiagram extends React.Component {
 
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
         this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
+
+        this.setupInitialGraph();
     }
 
     componentWillUnmount() {
@@ -259,14 +292,16 @@ class InfrastructureDiagram extends React.Component {
                     //draw circle
                     ctx.fillStyle = node.color;
                     ctx.beginPath();
-                    ctx.arc(node.x, node.y, node.val * globalScale, 0, 2 * Math.PI);
+                    ctx.arc(node.x, node.y, node.val * globalScale, 0,
+                            2 * Math.PI);
                     ctx.fill();
 
-                    const fontSize = 20/globalScale;
+                    const fontSize = 20 / globalScale;
                     ctx.font = `${fontSize}px Montserrat, sans-serif`;
 
                     const textWidth = ctx.measureText(node.name).width;
-                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.25);
+                    const bckgDimensions = [textWidth, fontSize].map(
+                        n => n + fontSize * 0.25);
 
                     ctx.fillStyle = 'rgba(30, 30, 30, 0.8)';
                     ctx.fillRect(
