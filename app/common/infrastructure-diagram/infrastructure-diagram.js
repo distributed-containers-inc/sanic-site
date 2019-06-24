@@ -31,8 +31,8 @@ class InfrastructureDiagram extends React.Component {
             nodes.push({
                            id: 'machine-' + machine.id,
                            name: machine.name,
-                           val: 8,
-                           color: '#ccc970'
+                           val: 4,
+                           color: 'rgba(204, 201, 112, 0.7)'
                        });
             for (let otherMachine of this.props.machines) {
                 if (otherMachine !== machine) {
@@ -107,6 +107,7 @@ class InfrastructureDiagram extends React.Component {
                     name: "Developer PC",
                     position: 'top-center',
                     val: 8,
+                    color: '#49c9cc'
                 },
                 {
                     id: REGISTRY_ID,
@@ -254,6 +255,31 @@ class InfrastructureDiagram extends React.Component {
                 linkWidth={5}
                 enableNavigationControls={false}
                 enableZoomPanInteraction={false}
+                nodeCanvasObject={(node, ctx, globalScale) => {
+                    //draw circle
+                    ctx.fillStyle = node.color;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.val * globalScale, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    const fontSize = 20/globalScale;
+                    ctx.font = `${fontSize}px Montserrat, sans-serif`;
+
+                    const textWidth = ctx.measureText(node.name).width;
+                    const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+
+                    ctx.fillStyle = 'rgba(30, 30, 30, 0.8)';
+                    ctx.fillRect(
+                        node.x - bckgDimensions[0] / 2,
+                        node.y - (bckgDimensions[1] / 2) + node.val*globalScale + fontSize,
+                        ...bckgDimensions
+                    );
+
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(node.name, node.x, node.y + node.val*globalScale + fontSize);
+                }}
             />
         );
 
