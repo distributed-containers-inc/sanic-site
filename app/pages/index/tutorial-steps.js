@@ -1,13 +1,9 @@
 import React from 'react';
 
-function cwd(state) {
-    return state.getEnvVariables().get('cwd');
-}
-
 //The tutorial is implemented as a finite state machine.
 const TUTORIAL_STEPS = {
     "EXPLORING_FILESYSTEM": {
-        text: 'This is a single minute, interactive tutorial for sanic. Type "ls" into the terminal above.',
+        text: 'This is a single minute, interactive tutorial for Sanic. Let\'s get started: "ls" into the terminal above.',
         started: (state, cmd) => {
             if (/^\s*ls(\s*\/*)*\s*$/.test(cmd)) {
                 return "EXPLORING_DOCKERFILE";
@@ -23,7 +19,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "BUILDING_LOCALLY": {
-        text: 'Sanic discovers all Dockerfiles in the project directory by default. Try "sanic build" to build them.',
+        text: 'When building, Sanic discovers all Dockerfiles in the project directory by default. Try "sanic build" to build some images.',
         started: (state, cmd) => {
             if (/^\s*sanic\s*build\s*$/.test(cmd)) {
                 return "BUILDING_AND_PUSHING_DEV";
@@ -31,7 +27,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "BUILDING_AND_PUSHING_DEV": {
-        text: 'Sanic also handles pushing to registries. Push to the development registry with "sanic build --push"',
+        text: 'Observe: In the graph below, some images have been added to the developer machine. Push to the development registry with "sanic build --push"',
         started: (state, cmd) => {
             if (/^\s*sanic\s*build\s*--push\s*$/.test(cmd)) {
                 return "DEPLOYING_DEV";
@@ -47,7 +43,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "SWITCH_ENVS": {
-        text: "Now that you've deployed locally, let's repeat the process for staging. Switch into the staging environment with 'sanic env staging'",
+        text: "Pods have been created from the source code on your local computer.  Now, let's repeat the process for the staging environment. Switch into it with 'sanic env staging'",
         started: (state, cmd) => {
             if (/^\s*sanic\s*env\s*staging\s*$/.test(cmd)) {
                 return "BUILDING_AND_PUSHING_STAGING";
@@ -71,7 +67,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "CALL_TO_ACTION": {
-    text: <a href="download">That's it! Click here to download the binary and get started!</a>,
+        text: <p>Deploying has created pods in the staging environment. Want to use sanic for your own Kubernetes projects? <a href="download">Click here to download Sanic!</a></p>,
     }
 };
 

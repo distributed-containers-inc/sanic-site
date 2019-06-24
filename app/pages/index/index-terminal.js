@@ -145,15 +145,15 @@ export default class IndexTerminal extends React.Component {
                 },
                 '/sanic-example/web': {},
                 '/sanic-example/web/Dockerfile': {
-                    content: 'FROM ubuntu:18.04\n# (... the rest of the dockerfile)'
+                    content: 'FROM python:3.7\n\nWORKDIR app\nCOPY . .\nENTRYPOINT ["python3", "/app.py"]'
                 },
                 '/sanic-example/redis': {},
                 '/sanic-example/redis/Dockerfile': {
-                    content: 'FROM redis\n# (... the rest of the dockerfile)'
+                    content: 'FROM redis\n\nCOPY redis.conf /usr/local/etc/redis/redis.conf\nCMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]'
                 },
                 '/sanic-example/api': {},
                 '/sanic-example/api/Dockerfile': {
-                    content: 'FROM ubuntu:18.04\n# (... the rest of the dockerfile)'
+                    content: 'FROM python:3.7\n\nWORKDIR app\nCOPY . .\nENTRYPOINT ["python3", "/app.py"]'
                 },
             });
 
