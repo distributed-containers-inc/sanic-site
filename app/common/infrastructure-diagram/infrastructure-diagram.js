@@ -217,7 +217,7 @@ class InfrastructureDiagram extends React.Component {
             return {
                 "top-center": {
                     x: 0,
-                    y: -0.12 * diagram.state.height
+                    y: -0.08 * diagram.state.height
                 },
                 "center": {
                     x: 0,
@@ -229,7 +229,7 @@ class InfrastructureDiagram extends React.Component {
                 },
                 "bottom-center": {
                     x: 0,
-                    y: 0.10 * diagram.state.height
+                    y: 0.08 * diagram.state.height
                 },
             }
         };

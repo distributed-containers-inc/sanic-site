@@ -51,7 +51,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "BUILDING_AND_PUSHING_STAGING": {
-        text: 'Build and push to the staging registry with sanic build --push',
+        text: 'Locally built images persist across environments, so let\'s skip that step and instead build and push to the staging registry with sanic build --push',
         started: (state, cmd) => {
             if (/^\s*sanic\s*build\s*--push\s*$/.test(cmd)) {
                 return "DEPLOYING_STAGING";
@@ -67,7 +67,7 @@ const TUTORIAL_STEPS = {
         }
     },
     "CALL_TO_ACTION": {
-        text: <p>Deploying has created pods in the staging environment. Want to use sanic for your own Kubernetes projects? <a href="download">Click here to download Sanic!</a></p>,
+        text: <p>Deploying has created pods in the staging environment. Want to use sanic to deploy your own Kubernetes project? <a href="download">Click here to download Sanic!</a></p>,
     }
 };
 
