@@ -286,6 +286,7 @@ class InfrastructureDiagram extends React.Component {
 
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
         this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
+        this.graphRef.current.d3Force("charge").strength(-120);
 
         this.setupInitialGraph();
     }
