@@ -146,6 +146,20 @@ class InfrastructureDiagram extends React.Component {
         return this.state.graphData.nodes.filter(n => !!n.pushedImage).map(n => n.pushedImage)
     }
 
+    pushedImageCoords(image) {
+        let x = 0;
+        let y = 0;
+        for(let node of this.state.graphData.nodes) {
+            if(node.id === 'pushed-image-'+image) {
+                if(node.x && node.y) {
+                    x = node.x;
+                    y = node.y
+                }
+            }
+        }
+        return {x, y};
+    }
+
     setDeployedImages(images) {
         this.setState(({ graphData: { nodes, links } }) => {
             const newNodes = [];
@@ -160,12 +174,15 @@ class InfrastructureDiagram extends React.Component {
                 let image = images[i];
                 let machineId = 'machine-'+this.props.machines[i % this.props.machines.length].name;
                 if(currImageIds.indexOf(image) === -1) {
+                    let {x, y} = this.pushedImageCoords(image);
+
                     newNodes.push({
                                       id: 'deployed-image-'+image,
                                       deployedImage: image,
                                       name: 'Pod running ' + image + ':latest',
                                       val: 3,
                                       color: '#cc7744',
+                                      x, y,
                                   });
                     newLinks.push({
                                       source: 'deployed-image-'+image,
