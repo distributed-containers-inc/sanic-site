@@ -21,7 +21,7 @@
     font-size: 120%;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
     #guide-prompt {
         display: block;
     }
