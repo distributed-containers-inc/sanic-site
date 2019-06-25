@@ -114,4 +114,7 @@ footer {
         margin-top: 0.15em;
         margin-bottom: 0.15em;
     }
+    :root {
+        font-size: 85%;
+    }
 }

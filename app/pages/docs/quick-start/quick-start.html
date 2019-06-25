@@ -41,20 +41,20 @@
         There are some Kubernetes solutions for Windows, but this guide will
         assume you are using either Mac or Linux for your development computer.
         As hinted at in the section above, we'll need to install three
-        things:<br>
-        <b>Kubernetes</b>:
+        things:</p>
+        <p><b>Kubernetes</b>:
         To interact with kubernetes, you'll need to
         <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">
-            install kubectl</a><br>
-        <b>Docker</b>: Sanic needs
-        <a href="https://docs.docker.com/install/">Docker</a> installed.<br>
-        Additionally, if you're on Linux, you'll need to
+            install kubectl</a><br></p>
+        <p><b>Docker</b>: Sanic needs
+        <a href="https://docs.docker.com/install/">Docker</a> installed.</p>
+        <p>Additionally, if you're on Linux, you'll need to
         <a href="https://docs.docker.com/install/linux/linux-postinstall/">
-            Allow access to Docker without a password</a><br>
-        <b>Sanic</b>: Sanic comes as an x86-64 executable.
+            Allow access to Docker without a password</a></p>
+        <p><b>Sanic</b>: Sanic comes as an x86-64 executable.
         You can download
-        <a href="https://github.com/distributed-containers-inc/sanic/releases/latest/download/sanic">the latest release here</a>.<br>
-        After downloading, put it somewhere on your path, e.g., <code>sudo mv ~/Downloads/sanic /usr/local/bin && sudo chmod 755 /usr/local/bin/sanic</code><br>
+        <a href="https://github.com/distributed-containers-inc/sanic/releases/latest/download/sanic">the latest release here</a>.
+        After downloading, put it somewhere on your path, e.g., <code>sudo mv ~/Downloads/sanic /usr/local/bin && sudo chmod 755 /usr/local/bin/sanic</code></p>
     </p>
     <h2>Preparing a server to use Kubernetes</h2>
     <p>Kubernetes runs a server called a "kubelet" on each server you want it to know about.

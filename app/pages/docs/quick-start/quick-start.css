@@ -13,6 +13,13 @@ li {
     padding: 5em 5em 5em 5em;
 }
 
+@media screen and (min-width: 500px) {
+    .content {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+}
+
 .block {
     display: block;
     white-space: pre;
