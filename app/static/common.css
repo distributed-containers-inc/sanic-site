@@ -12,6 +12,11 @@ html,body {
     background-color: #151519;
 }
 
+code {
+    background-color: #151519;
+    padding: 0.1em 0.1em 0.1em 0.1em;
+}
+
 .color-main {
     background-color: #26282d;
 }
@@ -95,7 +100,7 @@ footer {
 }
 
 @media screen and (max-width: 600px) {
-    #demo-button, #examples-button {
+    #docs-button, #examples-button {
         display: none
     }
     .header-nav {

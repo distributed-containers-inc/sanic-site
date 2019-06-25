@@ -88,13 +88,14 @@ func main() {
 	for _, pageHtmlPath := range pageHtmlPaths() {
 		pageDir := filepath.Dir(pageHtmlPath)
 		pageName := filepath.Base(pageHtmlPath)
+		pagePath := pageDir[len("pages/"):]
 		if strings.Contains(pageName, ".") {
 			pageName = pageName[:strings.Index(pageName, ".")]
 		}
-		router.GET("/"+pageName, func(c *gin.Context) {
+		router.GET("/"+pagePath, func(c *gin.Context) {
 			c.HTML(http.StatusOK, pageName+".html", nil)
 		})
-		router.StaticFile("/"+pageName+".css", pageDir+"/"+pageName+".css")
+		router.StaticFile("/"+pagePath+".css", pageDir+"/"+pageName+".css")
 	}
 
 	router.Static("/static", "static")

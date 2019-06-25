@@ -4,7 +4,7 @@ const fs = require('fs');
 
 let entries = () => {
     let ret = {};
-    for (let pagePath of glob.sync('./app/pages/*')) {
+    for (let pagePath of glob.sync('./app/pages/**')) {
         const jsFile = pagePath+"/"+path.basename(pagePath)+'.js';
         if(fs.existsSync(jsFile)) {
             ret[path.basename(pagePath)] = jsFile;

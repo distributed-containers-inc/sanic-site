@@ -1,0 +1,21 @@
+p {
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
+
+li {
+    margin-top: 0.15em;
+    margin-bottom: 0.5em;
+}
+
+.content {
+    background-color: #26282d;
+    padding: 5em 5em 5em 5em;
+}
+
+.block {
+    display: block;
+    white-space: pre;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
