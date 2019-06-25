@@ -14,3 +14,15 @@
 .terminalContainer span {
     white-space: pre !important;
 }
+
+#guide-prompt {
+    display: none;
+    margin-bottom: 1em;
+    font-size: 120%;
+}
+
+@media screen and (max-width: 500px) {
+    #guide-prompt {
+        display: block;
+    }
+}
