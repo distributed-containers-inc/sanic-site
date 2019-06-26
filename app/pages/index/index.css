@@ -6,7 +6,11 @@
     width: 100%;
 }
 
-/*TODO: HACKS*/
+p {
+    font-size: 125%;
+}
+
+/*TODO: HACK*/
 .react-swipeable-view-container > div {
     overflow: hidden !important;
 }

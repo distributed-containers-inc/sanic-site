@@ -91,8 +91,8 @@ class SanicFeatures extends React.Component {
                 >
                     {IndexClusterData.environments.map(env => (
                         <InfrastructureDiagram
-                            title={"Current environment: " + this.currentEnvironment().name}
-                            subtext={TUTORIAL_STEPS[this.state.currTutorialStep].text}
+                            maintext={TUTORIAL_STEPS[this.state.currTutorialStep].text}
+                            subtext={"Current environment: " + this.currentEnvironment().name}
                             machines={env.machines}
                             key={env.name}
                             ref={this.environmentRefs[env.name]}

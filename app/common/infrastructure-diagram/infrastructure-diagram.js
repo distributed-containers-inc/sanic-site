@@ -345,12 +345,12 @@ class InfrastructureDiagram extends React.Component {
                 paddingTop: '1em',
                 paddingBottom: '10em',
             }}>
-                {this.props.title ? (
-                    <h2 style={{
+                {this.props.maintext ? (
+                    <h3 style={{
                         textAlign: 'center',
                         width: '100%',
                         margin: '0',
-                    }}>{this.props.title}</h2>
+                    }}>{this.props.maintext}</h3>
                 ) : null}
                 {this.props.subtext ? (
                     <p style={{

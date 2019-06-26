@@ -3,7 +3,7 @@ import React from 'react';
 //The tutorial is implemented as a finite state machine.
 const TUTORIAL_STEPS = {
     "EXPLORING_FILESYSTEM": {
-        text: 'This is a single minute, interactive tutorial for Sanic. Let\'s get started: "ls" into the terminal above.',
+        text: 'This is a single minute, interactive tutorial for Sanic. Let\'s get started: Type "ls" into the terminal above.',
         started: (state, cmd) => {
             if (/^\s*ls(\s*\/*)*\s*$/.test(cmd)) {
                 return "EXPLORING_DOCKERFILE";
