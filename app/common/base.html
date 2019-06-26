@@ -27,6 +27,8 @@
     <!-- end page specific head contents -->
 </head>
 <body>
+{{template "header_nav" .}}
+{{define "header_nav"}}
 <nav class="header-nav">
     <a href="/docs/quick-start" id="docs-button">Docs</a>
     <a href="/download" id="download-button">Download</a>
@@ -34,6 +36,7 @@
     <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
     <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Examples</a>
 </nav>
+{{end}}
 <div class="main-content">
 {{template "content" .}}
 </div>
