@@ -1,0 +1,43 @@
+{{define "header_nav"}}
+<nav class="header-nav">
+    <a href="/" class="title" id="title-button"><img src="/static/images/whiteLogo.svg" /></a>
+
+    <a href="/docs/quick-start" id="docs-button">Docs</a>
+    <a href="/demo" id="examples-button">Demo</a>
+    <a href="/download" id="download-button">Download</a>
+    <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
+</nav>
+{{end}}
+
+{{define "content"}}
+<div class="content content-main">
+    <div class="main-sidebar">
+        <div class="tagline">Tired of kubernetes tools that don't prioritize user experience?</div>
+        <a href="/demo" class="cta-btn">Take a tour of Sanic</a>
+    </div>
+    <img class="main-graphic" src="/static/images/mainGraphic.svg"  alt=""/>
+</div>
+<div class="features-total-width-container">
+    <div class="content content-features">
+        <div class="feature">
+            <img src="/static/images/env.svg" alt="">
+            <h2>Environments</h2>
+            <p>Sanic allows you to define commands and configuration on a per-environment basis with ease.</p>
+        </div>
+        <div class="feature">
+            <img src="/static/images/concurrentBuild.svg" alt="">
+            <h2>Concurrent Builds</h2>
+            <p>Sanic uses Buildkit, cutting edge technology to build your images concurrently and efficiently.</p>
+        </div>
+        <div class="feature">
+            <img src="/static/images/integratedDeployment.svg" alt="">
+            <h2>Integrated Deployments</h2>
+            <p>Sanic allows you to define deployments using a templating language your team already understands.</p>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "extra_head"}}
+<link rel="stylesheet" href="index.css">
+{{end}}
