@@ -1,0 +1,16 @@
+{
+    "background": "#232528",
+    "button": "0b79fc",
+    "JumboTitleFont": "Roboto",
+    "Card": {
+        "shadow": "#b9c1c7",
+        "title": {
+            "font-family": "Roboto Slab",
+            "color": "#232528"
+        },
+        "text": {
+            "font-family": "Roboto",
+            "color": "#445766"
+        }
+    }
+}

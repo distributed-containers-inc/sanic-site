@@ -99,7 +99,7 @@ func main() {
 	}
 
 	router.Static("/static", "static")
-	router.StaticFile("/favicon.ico", "static/favicon.ico")
+	router.StaticFile("/favicon.ico", "static/favicon/favicon.ico")
 
 	router.Run("0.0.0.0:8080")
 }
