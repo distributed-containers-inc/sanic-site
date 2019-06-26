@@ -127,11 +127,42 @@ body {
 
 .cast {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     margin-top: 3em;
     margin-bottom: 3em;
 }
 
-.cast > *:first-child {
-    margin-right: 3em;
+.cast > div {
+    margin: 2em 2em;
+}
+
+.cast > div > h1 {
+    text-align: center;
+}
+
+.cast:nth-child(odd) {
+    flex-direction: row;
+}
+
+@media screen and (max-width: 1200px) {
+    .cast {
+        flex-direction: column !important;
+        font-size: 0.85em;
+        width: 69ch;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .asciinema-terminal {
+        font-size: 0.85em !important;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .cast {
+        flex-direction: column;
+        width: 69ch;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
