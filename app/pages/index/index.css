@@ -103,7 +103,7 @@ body {
 }
 
 .cta-btn:active, .cta-btn:hover, .cta-btn:visited, .cta-btn {
-    color: #cbe2f0;
+    color: #d8f1ff;
     text-align: center;
     text-decoration: none;
     margin-top: 1.5em;
@@ -122,5 +122,5 @@ body {
 }
 
 .cast > *:first-child {
-    margin-right: 2em;
+    margin-right: 3em;
 }
