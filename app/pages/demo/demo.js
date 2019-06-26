@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IndexTerminal from './index-terminal';
+import DemoTerminal from './demo-terminal';
 import {InfrastructureDiagram} from '../../common/infrastructure-diagram';
 import SwipableCarousel from '../../common/carousel';
 import {TUTORIAL_STEPS, INITIAL_STEP} from './tutorial-steps';
-import IndexClusterData from './index-cluster-data'
+import IndexClusterData from './cluster-data'
 
 class SanicFeatures extends React.Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class SanicFeatures extends React.Component {
                     e.currentTarget.scrollIntoView();
                 }}
             >
-                <IndexTerminal
+                <DemoTerminal
                     ref={this.terminalRef}
                     env={this.currentEnvironment().name}
                     validEnvs={IndexClusterData.environments.map(e => e.name)}

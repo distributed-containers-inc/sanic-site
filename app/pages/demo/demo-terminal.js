@@ -41,7 +41,7 @@ class NoScrollTerminal extends ReactTerminalStateless {
     }
 }
 
-export default class IndexTerminal extends React.Component {
+export default class DemoTerminal extends React.Component {
     constructor(props) {
         super(props);
 
