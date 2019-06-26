@@ -2,13 +2,8 @@ body {
     background-image: url("/static/images/LandingBackground.png");
     background-repeat: no-repeat;
     background-size: auto 70em;
+    background-position: top right;
     width: 100%;
-}
-
-.header-nav {
-    margin-top: 2em;
-    margin-left: 6em;
-    margin-right: 6em;
 }
 
 #title-button {
@@ -27,7 +22,7 @@ body {
 }
 
 .content-main {
-    height: 40em;
+    height: 30em;
     width: 100%;
     padding-left: 0;
     padding-right: 0;
@@ -43,6 +38,7 @@ body {
     flex-direction: column;
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: 3em;
     padding-left: 2em;
     padding-right: 2em;
 }
@@ -98,13 +94,17 @@ body {
 
 .cta-btn {
     background-color: #0b79fc;
-    padding: 0.5em 0.5em 0.5em 0.5em;
+    padding: 1em 1em 1em 1em;
+    margin-right: auto;
     border-radius: 0.3em;
+    width: 50%;
+    max-width: 450px;
+    font-weight: bold;
 }
 
 .cta-btn:active, .cta-btn:hover, .cta-btn:visited, .cta-btn {
     color: #cbe2f0;
     text-align: center;
     text-decoration: none;
-    margin-top: 1em;
+    margin-top: 1.5em;
 }
