@@ -33,7 +33,7 @@ class InfrastructureDiagram extends React.Component {
                                   color: 'rgba(204, 201, 112, 0.7)'
                               });
             }
-            newNodes[0].position = 'bottom-center';
+            newNodes[0].position = 'center-right';
 
             for (let nodeA of newNodes) {
                 for (let nodeB of newNodes) {
@@ -227,9 +227,9 @@ class InfrastructureDiagram extends React.Component {
                     x: -0.12 * diagram.state.width,
                     y: 0
                 },
-                "bottom-center": {
-                    x: 0,
-                    y: 0.08 * diagram.state.height
+                "center-right": {
+                    x:  0.12 * diagram.state.width,
+                    y: 0
                 },
             }
         };
@@ -286,7 +286,7 @@ class InfrastructureDiagram extends React.Component {
 
         this.graphRef.current.d3Force("center", this.forceCenterPositioned());
         this.graphRef.current.d3Force("wallRepeller", this.forceWallRepeller());
-        this.graphRef.current.d3Force("charge").strength(-120);
+        this.graphRef.current.d3Force("charge").strength(-200);
 
         this.setupInitialGraph();
     }
