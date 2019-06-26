@@ -53,17 +53,9 @@ body {
     flex: 0 1 auto;
     flex-direction: row;
     text-transform: uppercase;
-    width: 100%;
-    margin: 2em auto 2em auto;
+    margin: 2em 2em;
 }
 
-.header-nav:first-child {
-    margin-left: 5em;
-}
-
-.header-nav:last-child {
-    margin-right: 5em;
-}
 
 .header-nav > a {
     flex-grow: 1;
@@ -98,8 +90,11 @@ h1 {
     margin-right: auto;
 }
 
-.content, .header-nav, footer {
+.main-column {
     max-width: 1500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .column {
@@ -108,9 +103,6 @@ h1 {
 
 footer {
     padding: 2em 3em 2em 3em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
 }
 
 @media screen and (max-width: 600px) {

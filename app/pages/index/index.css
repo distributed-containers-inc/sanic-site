@@ -6,6 +6,17 @@ body {
     width: 100%;
 }
 
+.main-column {
+    max-width: 100%;
+}
+
+.main-column > *:not(.full-width), .main-column > .full-width > * {
+    max-width: 1500px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #title-button {
     margin-right: 10%;
     flex: 0 1 auto;

@@ -27,6 +27,7 @@
     <!-- end page specific head contents -->
 </head>
 <body>
+<div class="main-column">
 {{template "header_nav" .}}
 {{define "header_nav"}}
 <nav class="header-nav">
@@ -37,13 +38,12 @@
     <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Examples</a>
 </nav>
 {{end}}
-<div class="main-content">
 {{template "content" .}}
-</div>
-</body>
 <footer>
     © Distributed Containers Inc. 2019
 </footer>
+</div>
+</body>
 {{range $bundle := PageBundles}}
 <script type="text/javascript" src="/static/bundles/{{$bundle}}" async></script>
 {{end}}
