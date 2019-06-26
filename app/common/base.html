@@ -22,6 +22,8 @@
     <meta name="msapplication-TileImage" content="/static/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#151519">
 
+
+    <link rel="stylesheet" href="/static/lib/fontawesome/css/all.min.css">
     <!-- begin page specific head contents -->
 {{template "extra_head" .}}
     <!-- end page specific head contents -->
@@ -36,6 +38,9 @@
     <a href="/" class="title" id="title-button"><img src="/static/images/whiteLogo.svg" /></a>
     <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
     <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Examples</a>
+    <button class="icon">
+        <i class="fa fa-bars"></i>
+    </button>
 </nav>
 {{end}}
 {{template "content" .}}
