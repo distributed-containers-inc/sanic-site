@@ -17,13 +17,6 @@ body {
     margin-right: auto;
 }
 
-#title-button {
-    margin-right: 10%;
-    flex: 0 1 auto;
-    width: 5em;
-    height: 2em;
-}
-
 #title-button > img {
     margin-top: 0.35em;
 }

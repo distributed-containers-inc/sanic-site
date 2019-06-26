@@ -69,8 +69,9 @@ body {
 }
 
 .header-nav > a.title {
-    flex-grow: 3;
-    font-size: 2em;
+    width: 6ch;
+    margin-left: 6%;
+    margin-right: 6%;
 }
 
 h1 {
