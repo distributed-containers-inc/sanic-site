@@ -17,8 +17,8 @@ COPY app ./app
 RUN ./node_modules/.bin/webpack
 
 FROM debian:jessie
-COPY --from=nodebuild /src/app /app
 COPY --from=gobuild /src/sanicsite /app/sanicsite
+COPY --from=nodebuild /src/app /app
 WORKDIR /app
 
 ENTRYPOINT ["/app/sanicsite"]
