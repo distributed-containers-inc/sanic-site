@@ -27,7 +27,7 @@
         <div class="feature">
             <img src="/static/images/concurrentBuild.svg" alt="">
             <h2>Concurrent Builds</h2>
-            <p>Sanic uses Buildkit, cutting edge technology to build your images concurrently and efficiently.</p>
+            <p>Sanic uses Buildkit, cutting edge technology which builds your images concurrently and efficiently.</p>
         </div>
         <div class="feature">
             <img src="/static/images/integratedDeployment.svg" alt="">
@@ -36,8 +36,42 @@
         </div>
     </div>
 </div>
+<div class="content content-casts">
+    <div class="cast">
+        <asciinema-player
+                src="/static/asciicasts/build.cast"
+                rows="10"
+                cols="69"
+                autoplay="true"
+                loop="true"
+                font-size="1em"
+        >
+        </asciinema-player>
+        <div>
+            <h1>Build</h1>
+            <p>Sanic discovers all of the Dockerfiles in the project directory, and builds and pushes them in parallel.</p>
+        </div>
+    </div>
+    <div class="cast">
+        <div>
+            <h1>Work</h1>
+            <p>We've declared a print_env script in two separate environments. Watch as the one executed changes based on which environment we are in.</p>
+        </div>
+        <asciinema-player
+                src="/static/asciicasts/envs.cast"
+                rows="10"
+                cols="69"
+                autoplay="true"
+                loop="true"
+                font-size="1em"
+        >
+        </asciinema-player>
+    </div>
+</div>
 {{end}}
 
 {{define "extra_head"}}
 <link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="/static/lib/asciinema/asciinema-player.css">
+<script src="/static/lib/asciinema/asciinema-player.js"></script>
 {{end}}
