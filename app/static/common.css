@@ -79,8 +79,8 @@ body {
 #main-nav > .hamburger {
     display: none;
     position: absolute;
-    top: 2em;
-    right: 2em;
+    top: 3.5em;
+    right: 3.5em;
     height: 4em;
     width: 4em;
     background: rgba(240, 238, 239, 0.85);
