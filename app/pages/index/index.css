@@ -69,8 +69,7 @@ body {
 
 @media screen and (max-width: 700px) {
     .main-graphic {
-        width: 50%;
-        height: 50%;
+        height: 100%;
         margin: 7em auto 5em;
     }
 
@@ -87,6 +86,10 @@ body {
     .main-sidebar {
         margin-left: 0;
         margin-right: 0;
+    }
+
+    .tagline {
+        text-align: center;
     }
 }
 
@@ -198,7 +201,6 @@ a.cta-btn:active, a.cta-btn:hover, a.cta-btn:visited, a.cta-btn {
 @media screen and (max-width: 1500px) {
     .cast {
         flex-direction: column !important;
-        font-size: 0.85em;
         margin-left: auto;
         margin-right: auto;
         max-width: 80%;
@@ -206,6 +208,12 @@ a.cta-btn:active, a.cta-btn:hover, a.cta-btn:visited, a.cta-btn {
 
     .asciinema-terminal {
         font-size: 0.85em !important;
+    }
+
+    .cast > div {
+        text-align: center;
+        margin-left: 0;
+        margin-right: 0;
     }
 }
 
