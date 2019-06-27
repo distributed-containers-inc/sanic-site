@@ -48,30 +48,79 @@ body {
     font-size: 125%;
 }
 
-.header-nav {
+#main-nav {
     display: flex;
     flex: 0 1 auto;
     flex-direction: row;
     text-transform: uppercase;
-    margin: 2em 2em;
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 
 
-.header-nav > a {
-    flex-grow: 1;
+#main-nav > a {
     text-align: center;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: auto auto auto auto;
 
     font-size: 1.5em;
     text-decoration: none;
     color: #cbe2f0;
 }
 
-.header-nav > a.title {
-    width: 6ch;
-    margin-left: 6%;
-    margin-right: 6%;
+#main-nav > a.title {
+    padding-left: 6%;
+    padding-right: 6%;
+}
+
+#main-nav > a.title > img {
+    width: 12ch;
+}
+
+#main-nav > .hamburger {
+    display: none;
+    position: absolute;
+    top: 2em;
+    right: 2em;
+    height: 4em;
+    width: 4em;
+    background: rgba(240, 238, 239, 0.85);
+    border: 0;
+}
+
+@media screen and (max-width: 1100px) {
+    #main-nav > * {
+        display: none;
+    }
+
+    #main-nav.responsive > * {
+        display: block;
+    }
+
+    #main-nav > .hamburger, #main-nav > .title {
+        display: block;
+    }
+
+    #main-nav > .title {
+        margin-left: 10%;
+    }
+
+    #main-nav {
+        justify-content: space-between;
+    }
+
+    #main-nav.responsive {
+        flex-direction: column;
+    }
+
+    #main-nav.responsive.hamburger {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+button {
+    cursor: pointer;
 }
 
 h1 {
@@ -106,14 +155,7 @@ footer {
     padding: 2em 3em 2em 3em;
 }
 
-@media screen and (max-width: 600px) {
-    #docs-button, #examples-button {
-        display: none
-    }
-    .header-nav {
-        margin-top: 1em;
-        margin-bottom: 0.5em;
-    }
+@media screen and (max-width: 1000px) {
     .content {
         padding-top: 0.5em;
     }
@@ -121,7 +163,10 @@ footer {
         margin-top: 0.15em;
         margin-bottom: 0.15em;
     }
-    :root {
-        font-size: 85%;
+}
+
+@media screen and (max-width: 500px) {
+    footer {
+        font-size: 50%;
     }
 }

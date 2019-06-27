@@ -1,3 +1,7 @@
+#main-nav > .title {
+    order: -1;
+}
+
 body {
     background-image: url("/static/images/LandingBackground.png");
     background-repeat: no-repeat;
@@ -15,6 +19,8 @@ body {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    padding-right: 0;
+    padding-left: 0;
 }
 
 #title-button > img {
@@ -96,6 +102,26 @@ body {
     margin-top: 0;
 }
 
+@media screen and (max-width: 1500px) {
+    .content-features {
+        height: inherit;
+        flex-direction: column;
+    }
+
+    .feature {
+        width: 80%;
+        max-width: 600px;
+        margin: 2em auto;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .content-features {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
 .cta-btn {
     background-color: #0b79fc;
     padding: 1em 1em 1em 1em;
@@ -137,13 +163,13 @@ body {
     flex-direction: row;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1500px) {
     .cast {
         flex-direction: column !important;
         font-size: 0.85em;
-        width: 69ch;
         margin-left: auto;
         margin-right: auto;
+        max-width: 80%;
     }
 
     .asciinema-terminal {
@@ -151,11 +177,13 @@ body {
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 500px) {
+    .content-casts {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
     .cast {
-        flex-direction: column;
-        width: 69ch;
-        margin-left: auto;
-        margin-right: auto;
+        font-size: 0.5em;
     }
 }

@@ -32,13 +32,23 @@
 <div class="main-column">
 {{template "header_nav" .}}
 {{define "header_nav"}}
-<nav class="header-nav">
+<script>
+    const toggleNav = () => {
+        var nav = document.getElementById("main-nav");
+        if(nav.className === "responsive") {
+            nav.className = "";
+        } else {
+            nav.className = "responsive";
+        }
+    }
+</script>
+<nav id="main-nav">
     <a href="/docs/quick-start" id="docs-button">Docs</a>
     <a href="/download" id="download-button">Download</a>
     <a href="/" class="title" id="title-button"><img src="/static/images/whiteLogo.svg" /></a>
     <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
     <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Examples</a>
-    <button class="icon">
+    <button class="hamburger" onclick="toggleNav()">
         <i class="fa fa-bars"></i>
     </button>
 </nav>
