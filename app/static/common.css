@@ -3,16 +3,16 @@ html,body {
     padding: 0 0 0 0;
     font-family: Montserrat, sans-serif;
     font-weight: 500;
-    background-color: #2c2e33;
+    background-color: #1a1a1e;
     color: #c7ddeb;
 }
 
 .color-dark {
-    background-color: #151519;
+    background-color: #1a1a1e;
 }
 
 code {
-    background-color: #151519;
+    background-color: #1a1a1e;
     padding: 0.1em 0.1em 0.1em 0.1em;
 }
 
@@ -68,8 +68,8 @@ body {
 }
 
 #main-nav > a.title {
-    padding-left: 6%;
-    padding-right: 6%;
+    padding-left: 0;
+    padding-right: 7%;
 }
 
 #main-nav > a.title > img {
@@ -94,6 +94,8 @@ body {
 
     #main-nav.responsive > * {
         display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
     }
 
     #main-nav > .hamburger, #main-nav > .title {
