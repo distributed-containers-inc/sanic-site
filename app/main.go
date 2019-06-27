@@ -68,6 +68,7 @@ func loadTemplates() render.HTMLRender {
 				"PageBundles": func() ([]string, error) {
 					return pageBundles(pageName)
 				},
+				"Getenv": os.Getenv,
 			}).ParseFiles(append(layouts, pageHtmlPath)...))
 		r.Add(templateName, tmpl)
 	}
