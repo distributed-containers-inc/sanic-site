@@ -158,6 +158,10 @@ footer {
     padding: 2em 3em 2em 3em;
 }
 
+footer > .copyright {
+    margin-left: 2em;
+}
+
 @media screen and (max-width: 1000px) {
     .content {
         padding-top: 0.5em;
