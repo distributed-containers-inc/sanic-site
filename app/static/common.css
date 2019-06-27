@@ -48,7 +48,15 @@ body {
     font-size: 125%;
 }
 
-#main-nav {
+.title-container {
+    display: flex;
+}
+
+.title-container .title img {
+    max-width: 200px;
+}
+
+#new-nav {
     display: flex;
     flex: 0 1 auto;
     flex-direction: row;
@@ -58,7 +66,7 @@ body {
 }
 
 
-#main-nav > a {
+#new-nav > a {
     text-align: center;
     margin: auto auto auto auto;
     align-items: center;
@@ -68,19 +76,17 @@ body {
     color: #cbe2f0;
 }
 
-#main-nav > a.title {
+#new-nav > a.title {
     padding-left: 0;
     padding-right: 7%;
 }
 
-#main-nav > a.title > img {
+#new-nav > a.title > img {
     width: 12ch;
 }
 
-#main-nav > .hamburger {
+#new-nav > .hamburger {
     display: none;
-    position: absolute;
-    top: 3.5em;
     right: 3.5em;
     height: 4em;
     width: 4em;
@@ -88,34 +94,51 @@ body {
     border: 0;
 }
 
+#new-nav > .title-container {
+    display: flex;
+    flex-direction: row;
+}
+
+
 @media screen and (max-width: 1100px) {
-    #main-nav > * {
+    .title-container {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+    .title {
+        flex:1
+    }
+    .title img {
+        max-width: 200px;
+    }
+    #new-nav > * {
         display: none;
     }
 
-    #main-nav.responsive > * {
+    #new-nav > .title-container {
+        display: flex;
+    }
+
+    #new-nav.responsive > * {
         display: block;
         margin-top: 0.5em;
         margin-bottom: 0.5em;
     }
 
-    #main-nav > .hamburger, #main-nav > .title {
-        display: block;
-    }
-
-    #main-nav > .title {
+    #new-nav > .title {
         margin-left: 10%;
     }
 
-    #main-nav {
+    #new-nav {
         justify-content: space-between;
     }
 
-    #main-nav.responsive {
+    #new-nav.responsive {
         flex-direction: column;
     }
 
-    #main-nav.responsive.hamburger {
+    #new-nav.responsive.hamburger {
         position: absolute;
         right: 0;
         top: 0;

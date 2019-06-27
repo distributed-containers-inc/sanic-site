@@ -40,7 +40,7 @@
 {{define "header_nav"}}
 <script>
     const toggleNav = () => {
-        var nav = document.getElementById("main-nav");
+        var nav = document.getElementById("new-nav");
         if(nav.className === "responsive") {
             nav.className = "";
         } else {
@@ -49,16 +49,19 @@
     }
 </script>
 <nav id="main-nav">
-    <a href="/" class="title" id="title-button"><img src="/static/images/whiteLogo.svg" /></a>
-    <a href="/docs/quick-start" id="docs-button">Docs</a>
-    <a href="/download" id="download-button">Download</a>
-    <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
-    <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Examples</a>
-    <button class="hamburger" onclick="toggleNav()">
-        <i class="fa fa-bars"></i>
-    </button>
+    <div class="title-container">
+        <a href="/" class="title" id="title-button"><img src="/static/images/whiteLogo.svg" /></a>
+        <button class="hamburger" onclick="toggleNav()">
+            <i class="fa fa-bars"></i>
+        </button>
+    </div>
+    <div id="new-nav"> <a href="/docs/quick-start" id="docs-button">Docs</a>
+        <a href="/download" id="download-button">Download</a>
+        <a href="https://github.com/distributed-containers-inc/sanic" id="source-button">Source</a>
+        <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example" id="examples-button">Eamples</a></div>
+
 </nav>
-{{end}}
+   {{end}}
 {{template "content" .}}
 <footer>
     <span class="copyright">
