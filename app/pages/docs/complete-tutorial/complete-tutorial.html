@@ -1,0 +1,196 @@
+{{define "content"}}
+<div class="content-light column">
+    <h1>Complete tutorial: Making a tech company with Kubernetes, Docker, & Sanic</h1>
+    <h2>Purpose</h2>
+    <p>
+        It's perfectly fine to deploy static websites without Docker, Kubernetes, or
+        Sanic.
+        The difficulty arises when you want to integrate multiple services
+        together (i.e., "system design"):
+    </p>
+    <ul>
+        <li>A database like <a href="https://mariadb.org/">MariaDB</a> or <a
+                href="https://www.postgresql.org/">PostgreSQL</a></li>
+        <li>A key-value store like <a href="https://redis.io">Redis</a></li>
+        <li>A load-balancer and multiple servers for redundancy like <a
+                href="http://www.haproxy.org/">haproxy</a> or <a
+                href="https://www.nginx.com/">nginx</a></li>
+        <li>Logging solutions like <a
+                href="https://www.fluentd.org/">fluentd</a> or <a
+                href="https://www.elastic.co/products/logstash">Logstash</a>
+        </li>
+    </ul>
+    <p><b>Kubernetes</b> lets you say, among other things, "I want to run five
+        containers running my webserver in case a few crash, and automatically send requests to
+        one of them."</p>
+    <p><b>Docker</b> lets you avoid the pain of "to deploy, download these
+        things." Docker images contain all of the necessary libraries and
+        configurations for a specific app.</p>
+    <p><b>Sanic</b> ties Docker and Kubernetes together, allowing you to quickly
+        build & deploy projects using them.</p>
+    <p>
+        This guide will show you how to make an entire backend for a fictional
+        tech company using Docker, Kubernetes, and Sanic on a single server
+        in such a way that you could scale to hundreds of servers with ease.</p>
+    <p>Note: Even if you aren't planning on making a company any time soon,
+        this guide will still be an excellent primer for making backends with
+        Docker, Kubernetes, and Sanic.</p>
+
+    <h2>Preparing a computer to use Docker, Kubernetes, and Sanic</h2>
+    <p>
+        There are some Kubernetes solutions for Windows, but this guide will
+        assume you are using either Mac or Linux for your development computer.
+        As hinted at in the section above, we'll need to install three
+        things:</p>
+        <p><b>Kubernetes</b>:
+        To interact with kubernetes, you'll need to
+        <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">
+            install kubectl</a><br></p>
+        <p><b>Docker</b>: Sanic needs
+        <a href="https://docs.docker.com/install/">Docker</a> installed.</p>
+        <p>Additionally, if you're on Linux, you'll need to
+        <a href="https://docs.docker.com/install/linux/linux-postinstall/">
+            Allow access to Docker without a password</a></p>
+        <p><b>Sanic</b>: Sanic comes as an x86-64 executable.
+        You can download
+        <a href="https://github.com/distributed-containers-inc/sanic/releases/latest/download/sanic">the latest release here</a>.
+        After downloading, put it somewhere on your path, e.g., <code>sudo mv ~/Downloads/sanic /usr/local/bin && sudo chmod 755 /usr/local/bin/sanic</code></p>
+    </p>
+    <h2>Preparing a server to use Kubernetes</h2>
+    <p>Kubernetes runs a server called a "kubelet" on each server you want it to know about.
+    For this guide, we'll set up 1 server running Ubuntu Linux. If you aren't sure, consider one of the following providers:</p>
+    <ul>
+        <li><a href="https://www.digitalocean.com/products/droplets/">Digital Ocean</a></li>
+        <li><a href="https://www.ovh.com/">OVH</a></li>
+        <li><a href="https://www.linode.com/">Linode</a></li>
+    </ul>
+    <p>Once you've paid your servers, you should install Ubuntu Linux on them, steps for this will vary by provider.
+        You'll need to install
+        <a href="https://kubernetes.io/docs/setup/production-environment/container-runtimes/">Docker for Kubernetes</a>,
+        as well as
+        <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl">
+            Kubenetes itself
+        </a> on the server (Your local computer and the server need different software installed, refer to the section above this one.)
+    </p>
+    <p>Now that everything's installed, you can set up the Kubernetes cluster. On the node, there are a few commands to run (log in as root!):</p>
+    <ul>
+        <li><code>kubeadm init --pod-network-cidr=10.244.0.0/16</code> -- this sets up a kubelet on your computer with pods having "IPs" from 10.244.0.0 to 10.244.255.255. In practice, this is just a requirement for step #2 below.</li>
+        <li><code>KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/canal.yaml</code> --
+            kubectl uses a secret key in its configuration to access the cluster, but it looks at ~/.kube/config by default.
+            The KUBECONFIG variable tells kubectl to look at /etc/kubernetes/admin.conf, which is where kubeadm put the one for this cluster.
+            We do this because <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/">Kubernetes need a "networking plugin" set up.</a>  There are many choices, but canal is a good choice if you aren't sure where to start.</li>
+        <li><code>KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f https://github.com/distributed-containers-inc/sanic-site/blob/0ef7f3b9ad234f88ea9b1e1ac169fb17400e42f7/hack/bare-metal-nginx-ingress.yaml</code> --
+            this sets up an <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress Controller</a> for your cluster.
+            These are in charge of routing things to various services.  You'll be able to point /api to one server, and / to another server, for example.
+            You can also run multiple domains on the same cluster.</li>
+        <li><code>KUBECONFIG=/etc/kubernetes/admin.conf kubectl taint nodes --all node-role.kubernetes.io/master-</code> --
+            By default, kubeadm "taints" the first nodes (the "master node") as unable to have things scheduled on it.  This is so that a broken container doesn't crash the whole kubernetes cluster, but we'll disable this so that we only need one server. (Note: the trailing dash means "remove this taint")</li>
+    </ul>
+    <h2>Interacting with Kubernetes</h2>
+    <p>Now that we've installed kubectl on our developer computer and the kubelet (via kubeadm) on the server, we can interact with the production server.</p>
+    <p>On your developer, download the configuration with the private key: <code>scp (server user)@(server host) /etc/kubernetes/admin.conf ~/.kube/sanic-intro.conf</code></p>
+    <p>We should be able to interact with the kubernetes server from the host now: <code>KUBECONFIG=~/.kube/sanic-intro.conf kubectl get nodes</code> should list the one node we've set up so far.</p>
+    <p>Of course, you'll likely have a different KUBECONFIG for every cluster (local / staging / CI / production / personal projects / ...), which is the first thing we'll use Sanic to manage:</p>
+    <p>Make a new directory somewhere, i.e., <code>mkdir -p ~/projects/sanic-intro && cd ~/projects-sanic-intro</code>
+    To turn this into a sanic project, create a new file in this directory called <code>sanic.yaml</code>
+    <code class="block">environments:
+  dev:
+    clusterProvisioner: localdev
+  prod:
+    clusterProvisioner: external
+    clusterProvisionerArgs:
+      registry: dummy
+      kubeConfig: ~/.kube/sanic-intro.conf</code></p>
+    <p>This defines two "environments" for us to build and push to: "dev" is for locally developing & testing our docker images and kubernetes configurations, and "prod" is configured to point to the server we set up in the previous section.</p>
+    <p>With our sanic.yaml file configured, we can enter an environment for our project. While in the directory which contains "sanic.yaml", type <code>sanic env prod</code></code></p>
+    <p>Notice that Sanic prefixes your terminal prompt with the project (from the name of the directory) and environment you're currently in.</p>
+    <p>Test that sanic can successfully connect to the kubernetes cluster, try <code>sanic kubectl get po</code> -- this command is a wrapper around kubectl which sets KUBECONFIG based on which environment you are in.</p>
+    <p>Next, let's create a webserver.  Create a new directory called "web" add the Dockerfile & contents from <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example/timestamp-as-a-service/services/web">One of the sanic examples.</a></p>
+    <p>Just by having a directory with a Dockerfile in a subdirectory of the "project root" (i.e., where sanic.yaml is), sanic is able to build it.  Give it a try with <code>sanic build</code> -- With only one service, sanic build is just a convenient wrapper for "docker build"</p>
+    <p>Sanic has created a unique tag based on the contents of the directory, and then built & loaded the image locally.  You could <code>docker run</code> it now, but let's use kubernetes instead:</p>
+    <p>Sanic will, by default, look for kubernetes configurations in deploy/in and then template them using <a href="https://golang.org/pkg/text/template/">The Go Templating language</a> into deploy/out.</p>
+    <p>Let's put the following kubernetes configuration deploy/in/web.yaml.tmpl:</p>
+    <code class="block">{{`---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: web
+  labels:
+    k8s-app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      k8s-app: web
+  template:
+    metadata:
+      labels:
+        k8s-app: web
+        name: web
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - image: {{getenv "REGISTRY_HOST"}}/web:{{getenv "IMAGE_TAG"}}
+        name: web
+        ports:
+        - name: http
+          containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: web
+spec:
+  selector:
+    k8s-app: web
+  ports:
+  - protocol: TCP
+    port: 80
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: web
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web
+          servicePort: 80
+`}}</code>
+<p>This is a lot of configuration, but it's for a good cause. Let's go through the blocks:</p>
+<ul>
+    <li>The Deployment block says to ensure three pods running the image (your registry)/web:(the latest built tag) should always be running, and it has a port at :80 which is used to connect to it</li>
+    <li>The Service is a generalization of all of the pods labelled "web" (which were started by the Deployment), it allows you to "curl http://web:80" anywhere in the cluster to connect to one (at random) of the pods.</li>
+    <li>The Ingress tells our load balancer (from right after we set up kubernetes on the server) that requests to http://(the server IP) should be forwarded to the web service (and then to one of the pods)</li>
+    <li>That is, it goes (client) -> (ingress) -> (service) -> (pod)</li>
+    <li>Again, this is quite complicated, but it's necessary to ensure that your infrastructure can scale to dozens of webservers and kubernetes nodes.</li>
+</ul>
+<p>To deploy our webserver to production, we need a registry to push to: A registry is a place you can store your docker images.  For now, <a href="https://hub.docker.com/signup">Sign up for Docker Hub</a></p>
+<p>After signing up, there are two steps: One is to tell docker about how to authenticate with Docker Hub with <code>docker login -u (the docker ID you chose)</code></p>
+<p>The other is to tell sanic where to push your images to for this project, change <code>registry: dummy</code> to <code>registry: (the docker ID you chose)</code> in <code>sanic.yaml</code>.</p>
+<p>With this in place, we can build and push to docker hub with <code>sanic build --push</code></p>
+<p>Note: This might take a while, depending on your internet upload speed.</p>
+<p>After pushing, we can tell Sanic to build our kubernetes configurations and deploy them with the simple command <code>sanic deploy</code></p>
+<p>With all of this in place, you should be able to navigate to http://(your server IP) and see the deployed webserver!</p>
+<h2>Recap</h2>
+<p>By following this guide, you've:</p>
+<ol>
+    <li>Set up kubectl and docker locally (to enable local kubernetes development)</li>
+    <li>Installed kubernetes on a server</li>
+    <li>Set up a production environment and sanic repository, and</li>
+    <li>Deployed a single-image app to the production server using the sanic configuration.</li>
+</ol>
+<p>For next steps, try running <code>sanic build --push && sanic deploy</code> after entering the dev environment with <code>sanic env dev</code> -- this allows you to test locally before pushing to production</p>
+<p>For multi-node deployments, run the <code>kubeadm join</code> command printed when you <code>kubeadm init</code>-ed on each of the new servers you want to add.  Pods will automatically schedule to new nodes!</p>
+<p>To continue adding services, look at the redis & api server services (services/ & deploy/in/web.yaml.tmpl) in <a href="https://github.com/distributed-containers-inc/sanic/tree/master/example/timestamp-as-a-service">the timestamp-as-a-service example</a></p>
+<p>Finally, if you run into any issues with kubernetes, docker, or sanic, please get in touch with Colin &lt;<a href="mailto:me@colinchartier.com">me@colinchartier.com</a>&gt;, the author of this guide!</p>
+</div>
+{{end}}
+{{define "extra_head"}}
+<link rel="stylesheet" href="complete-tutorial.css">
+{{end}}
