@@ -13,8 +13,17 @@ li {
 }
 
 @media screen and (max-width: 600px) {
-    .content {
-        padding: 2em 2em 2em 2em;
+    .content-light {
+        padding: 30px 30px 30px 30px;
+    }
+    .asciinema-player-wrapper {
+        font-size: 75%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .asciinema-player-wrapper {
+        font-size: 50%;
     }
 }
 
