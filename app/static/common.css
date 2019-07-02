@@ -16,6 +16,13 @@ code {
     padding: 0.1em 0.1em 0.1em 0.1em;
 }
 
+code.block {
+    display: block;
+    white-space: pre;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
+
 .color-main {
     background-color: #26282d;
 }

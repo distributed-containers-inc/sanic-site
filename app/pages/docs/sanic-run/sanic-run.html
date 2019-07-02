@@ -1,0 +1,69 @@
+{{define "content"}}
+<div class="content-light column">
+    <h1>The "sanic run" command</h1>
+    <h2>Purpose</h2>
+    <p>
+        The purpose of <code>sanic run</code> is to allow you to define shell scripts in a centralized, environment-friendly way.
+        In particular, a command like <code>sanic run test</code> should be standardized across projects at your organization, to easily allow developers the ability to run tests on the current running environment.
+    </p>
+    <h2>Arguments</h2>
+    <p>
+        Sanic allows you to refer to arguments in your scripts with shell variable placeholders. Consider the following sanic.yaml:
+        <code class="block">environments:
+  demo:
+    commands:
+    - name: use_args
+      command: echo "the first few args are $1 $2 $3, the fourth is '$4'"</code>
+    </p>
+    <p>
+        See what happens when we enter the "demo" environment in sanic:
+        <asciinema-player
+                src="/static/asciicasts/sanic-run-args.cast"
+                rows="12"
+                cols="81"
+                autoplay="true"
+                loop="true"
+                font-size="1em"
+        >
+        </asciinema-player>
+    </p>
+    <h2 id="env-vars">Environment Variables</h2>
+    <p>For convenience, sanic passes numerous environment variables to commands run
+    by <code>sanic run</code>:
+    </p>
+    <ul>
+        <li>SANIC_ROOT - the directory which contains the <code>sanic.yaml</code> file.</li>
+        <li>SANIC_ENV - the name of the environment the user is currently in.</li>
+        <li>SANIC_CONFIG - the location of the <code>sanic.yaml</code> file.</li>
+    </ul>
+    <p>
+        Consider the following sanic.yaml, which prints the current environment and sanic root:
+    <code class="block">environments:
+  demo:
+    commands:
+    - name: print_env
+      command: echo "The current environment is $SANIC_ENV."
+    - name: print_root
+      command: echo "The project root is $SANIC_ROOT."</code>
+    </p>
+    <h2>Using another programming language for scripting</h2>
+    <p>
+        You can easily use another scripting language to define sanic scripts.  Consider the following sanic.yaml:
+    </p>
+    <code class="block">environments:
+  demo:
+    commands:
+    - name: tests
+      command: exec python3 scripts/tests.py $@</code>
+    <p>
+        This will run scripts/tests.py with the arguments given to "sanic run".
+        The python script will be able to use the <a href="#env-vars">sanic environment variables</a>
+    </p>
+</div>
+{{end}}
+{{define "extra_head"}}
+    <link rel="stylesheet" href="/static/lib/asciinema/asciinema-player.css">
+    <script src="/static/lib/asciinema/asciinema-player.js"></script>
+
+    <link rel="stylesheet" href="quick-start.css">
+{{end}}
