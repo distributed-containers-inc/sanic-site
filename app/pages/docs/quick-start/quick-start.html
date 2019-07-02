@@ -84,6 +84,15 @@
     >
     </asciinema-player>
 
+    <h2>Cluster Provisioners</h2>
+    <p>
+        Sanic environments usually define a <code>clusterProvisioner</code> key which tells sanic how to connect to a kubernetes cluster. There are currently two options:
+    </p>
+    <ul>
+        <li><code>clusterProvisioner: localdev</code> - the localdev provisioner automatically starts a 3 node kubernetes-in-docker cluster on your local docker host when you first <code>sanic deploy</code></li>
+        <li><code>clusterProvisioner: external</code> - the external provisioner connects to an externally provisioned kubernetes cluster. See <a href="https://github.com/distributed-containers-inc/sanic/blob/fa2c6339f5803e899270a0107ea47beff94be81b/example/timestamp-as-a-service/sanic.yaml">the timestamp-as-a-service sanic.yaml for reference</a></li>
+    </ul>
+
 
 </div>
 {{end}}
