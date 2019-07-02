@@ -1,7 +1,7 @@
 {{define "content"}}
 <div class="content-light column">
     <h1>Download</h1>
-    <h2>Sanic is currently only available for GNU/Linux x64</h2>
+    <h2>Sanic is currently only officially supported for GNU/Linux x64</h2>
     <a
             href="https://github.com/distributed-containers-inc/sanic/releases/latest/download/sanic"
             onclick="setTimeout(() => window.location='/postdownload', 1000)">
@@ -17,6 +17,10 @@
     <p>
         To get started, download sanic somewhere on your bin/ directory, i.e., "sudo cp ~/Downloads/sanic /usr/local/bin/"<br>
         The first command you'll likely run is "sanic deploy" to start the kubernetes cluster in your local docker, please have patience because this step only ever needs to be slow once!
+    </p>
+    <h2>Other platforms</h2>
+    <p>
+        Try <a href="https://github.com/distributed-containers-inc/sanic">downloading the source code</a> and building it for your own platform!
     </p>
 </div>
 {{end}}
