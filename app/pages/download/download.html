@@ -18,16 +18,18 @@
         All there is to do is:
     </p>
     <ol>
+        <li>Install docker and kubectl</li>
+        <li>Allow access to docker, i.e., <code>sudo usermod -a -G docker $(whoami)</code> and logging out / back in</li>
         <li>Add sanic to your PATH, i.e., <code>sudo cp ~/Downloads/sanic /usr/local/bin/</code></li>
         <li>Make sanic executable, i.e., <code>sudo chmod 755 /usr/local/bin/sanic</code></li>
     </ol>
     <p>
         After adding sanic to your path, there is no other installation required.
-        The first command you'll likely run is "sanic deploy" to start the kubernetes cluster in your local docker, please have patience because this step only ever needs to be slow once!
     </p>
     <h2>Other platforms</h2>
     <p>
         Try <a href="https://github.com/distributed-containers-inc/sanic">downloading the source code</a> and building it for your own platform!
     </p>
+    <p>Arch linux has an <a href="https://aur.archlinux.org/packages/sanic/">unofficial, user-supported AUR package</a>
 </div>
 {{end}}
