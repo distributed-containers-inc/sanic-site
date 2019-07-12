@@ -21,6 +21,9 @@
         The <code>environments</code> key describes places you can build and push to.
         In this case, we have two.
     </p>
+    <p>
+        For a more comprehensive configuration reference, see the <a href="https://github.com/distributed-containers-inc/sanic/blob/master/README.md">README for the project.</a>
+    </p>
     <h3>Environment specific commands</h3>
     <p>
         Notice that in the configuration above, we define a command called "tests_for_our_project".
@@ -53,10 +56,11 @@
       Dockerfile
     api/
       Dockerfile
-</code>
-        In this project, sanic would build images named "web" and "api" if you used <code>sanic build</code>
+</code></p>
+    <p>
+        In this project, sanic would build images named "web" and "api" if you used <code>sanic build</code>.
         The tag for the images would be automatically generated from the current files in the repository.
-        To push your images to kubernetes for them to be deployed, simply run <code>sanic build --push</code> to build and push to a registry concurrently.
+        At deployment time, simply run <code>sanic build --push</code> to build and push to the registry for your current environment.
     </p>
     <asciinema-player
             src="/static/asciicasts/build.cast"
@@ -83,6 +87,12 @@
             speed="1.5"
     >
     </asciinema-player>
+    <p>
+        Sanic uses docker images for templating, and has official support for go templates and kustomize patches.
+        If your team is already familiar with a specific templating solution, it's easy to add new templating functionality to sanic by creating a new docker image that runs your templater.
+        See <a href="https://github.com/distributed-containers-inc/sanic-templater-golang">the golang templater</a> for a reference implementation.
+        After deploying your image to dockerhub, set it as the value for <code>templaterImage</code> in the <code>deploy</code> section of your <code>sanic.yaml</code>.
+    </p>
 
     <h2>Cluster Provisioners</h2>
     <p>
